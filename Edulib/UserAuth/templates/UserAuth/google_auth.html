@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
+
 {% block head %}
 <meta charset="utf-8" />
 <meta
@@ -20,6 +21,7 @@
   href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
 />
 {% endblock %}
+
 
 {% block body %}
 
@@ -49,48 +51,18 @@
                   ></path>
                 </svg>
               </div>
-              <form action="{% url 'register' %}" class="text-center" method="post">
+              <form action="{% url 'UserAuth:google_auth' %}" class="text-center" method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                  <input
-                    class="form-control"
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                  />
-                </div>
-                <div class="mb-3">
-                    <input
-                      class="form-control"
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                    />
-                  </div>
-                <div class="mb-3">
-                  <input
-                    class="form-control"
-                    type="password"
-                    name="password1"
-                    placeholder="Password"
-                  />
-                </div>
-                <div class="mb-3">
-                    <input
-                      class="form-control"
-                      type="password"
-                      name="password2"
-                      placeholder="Confirm Password"
-                    />
-                  </div>
-                <div class="mb-3">
+                    <p>You're not registered yet!</p>
+                  <p>Select Role before you continue</p>
                   <select name="role" class="form-select" aria-label="Default select example">
                       <option value="student" selected>Student</option>
                       <option value="educator">Educator</option>
                       <option value="evaluator">Evaluator</option>
                   </select>
                 </div>
-                <input name="register_type" type="hidden" value="normal" />
+                <input name="register_type" type="hidden" value="google" />
                 {% for message in messages %}
                 <p style="color: red">{{message}}</p>
                 {% endfor %}
@@ -100,10 +72,6 @@
                   </button>
                 </div>
               </form>
-              <p class="text-muted">Forgot your password?</p>
-              <p class="text-muted">
-                already registered? <a href="{% url 'login' %}">Login</a>
-              </p>
             </div>
           </div>
         </div>
