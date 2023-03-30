@@ -9,5 +9,6 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("login", views.login, name="login"),
     path("logout", LogoutView.as_view()),
-    path("register/", views.register, name="register")
+    path("register/", views.register, name="register"),
+    path("google_auth/", views.google_auth, name="google_auth"),
 ]
