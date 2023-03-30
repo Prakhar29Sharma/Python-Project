@@ -14,6 +14,8 @@ class User(AbstractUser):
 
     role = models.CharField(max_length=50, choices=Role.choices)
 
+    isProfileComplete = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         if not self.pk:
             self.role = self.base_role
