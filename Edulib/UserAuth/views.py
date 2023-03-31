@@ -99,7 +99,6 @@ def register(request):
 def google_auth(request):
     if request.method == "POST":
         username = request.user.username
-        email = request.user.email
         role = request.POST["role"]
         if role is not None:
             if role == "student":
