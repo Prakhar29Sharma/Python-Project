@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -153,3 +154,5 @@ SOCIALACCOUNT_PROVIDERS = {
 SITE_ID = 5
 
 AUTH_USER_MODEL = "UserAuth.User"
+
+LOGIN_REDIRECT_URL = '/'

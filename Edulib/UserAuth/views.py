@@ -13,7 +13,11 @@ User = get_user_model()
 
 
 def index(request):
-    return redirect("UserAuth:index")
+    if request.user.is_authenticated:
+        if request.user.role.lower() == "contributor":
+            return redirect("Contributor:home")
+    else:
+        return redirect("UserAuth:index")
 
 
 def login(request):
@@ -100,6 +104,7 @@ def google_auth(request):
     if request.method == "POST":
         username = request.user.username
         role = request.POST["role"]
+        email = request.user.email
         if role is not None:
             if role == "student":
                 student = Student.student.create_user(
