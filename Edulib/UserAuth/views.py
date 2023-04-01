@@ -13,11 +13,11 @@ User = get_user_model()
 
 
 def index(request):
+    if request.method == "POST":
+        print("login type: ", request.POST["login_type"])
     if request.user.is_authenticated:
-        if request.user.role.lower() == "contributor":
-            return redirect("Contributor:home")
-    else:
-        return redirect("UserAuth:index")
+        return redirect("Contributor:dashboard")
+    return render(request, "index.html")
 
 
 def login(request):

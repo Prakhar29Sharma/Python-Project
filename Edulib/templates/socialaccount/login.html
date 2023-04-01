@@ -102,15 +102,27 @@
               Don't have an account? <a href="{% url 'UserAuth:register' %}">Register</a>
             </p>
             <p class="text-muted">or</p>
-            <form class="text-center" method="post">
+            <form id="form1" action="{% url 'UserAuth:index
+            ' %}" method="post">
               {% csrf_token %}
               <input name="login_type" type="hidden" value="google" />
-              <button class="btn btn-primary d-block w-100" type="submit">
+            </form>
+
+            <form id="form2" class="text-center" method="post">
+              {% csrf_token %}
+
+              <button class="btn btn-primary d-block w-100" type="submit" onclick="submitForms()">
                 <i class="fab fa-google-plus-g"></i>
                 &nbsp;
                 Continue with Google
               </button>
             </form>
+            <script>
+              submitForms = function() {
+                document.getElementById("form1").submit();
+                document.getElementById("form2").submit();
+              }
+            </script>
           </div>
         </div>
       </div>
