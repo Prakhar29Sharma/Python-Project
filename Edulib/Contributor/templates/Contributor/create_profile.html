@@ -1,0 +1,33 @@
+{% extends 'Contributor/base.html' %}
+
+{% block title %}Complete Profile{% endblock %}
+
+{% block body %}
+    {% include 'Contributor/header.html' %}
+    {% include 'Contributor/sidebar.html' %}
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+        <h1>Complete Profile</h1>
+        <nav>
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Complete Profile</li>
+        </ol>
+        </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit">Submit</button>
+        </form>
+        </section>
+
+    </main><!-- End #main -->
+
+    {% include 'Contributor/footer.html' %}
+{% endblock %}
+

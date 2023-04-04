@@ -1,50 +1,8 @@
 {% extends 'Contributor/base.html' %}
-
+{% block title %}Dashboard{% endblock %}
 {% block body %}
 {% include 'Contributor/header.html' %}
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
-
-<ul class="sidebar-nav" id="sidebar-nav">
-
-  <li class="nav-item">
-    <a class="nav-link " href="{% url 'Contributor:dashboard' %}">
-      <i class="bi bi-grid"></i>
-      <span>Dashboard</span>
-    </a>
-  </li><!-- End Dashboard Nav -->
-
-  <li class="nav-item">
-    <a class="nav-link " href="#">
-      <i class="bx bxs-book-content"></i>
-      <span>My Contributions</span>
-    </a>
-  </li><!-- End My Contribution Nav -->
-
-  <li class="nav-item">
-    <a class="nav-link " href="#">
-      <i class="bi bi-stars"></i>
-      <span>Review Others Contributions</span>
-    </a>
-  </li><!-- End Review Others Nav -->
-
-  <li class="nav-item">
-    <a class="nav-link " href="#">
-      <i class="ri-user-fill"></i>
-      <span>Profile</span>
-    </a>
-  </li><!-- End Profile Nav -->
-
-  <li class="nav-item">
-    <a class="nav-link " href="{% url 'UserAuth:logout' %}">
-      <i class="ri-logout-box-line"></i>
-      <span>Logout</span>
-    </a>
-  </li><!-- End Logout Nav -->
-
-</ul>
-
-</aside><!-- End Sidebar-->
+{% include 'Contributor/sidebar.html' %}
 
 <main id="main" class="main">
 
@@ -98,7 +56,7 @@
         <!-- if profile not complete display warning -->
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           <i class="bi bi-exclamation-octagon me-1"></i>Complete your Profile and get started with contributions!
-          <a href="#" class="" >click here</a>
+          <a href="{% url 'Contributor:create_profile' %}" class="" >click here</a>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <!-- warning end -->
@@ -145,6 +103,7 @@
     </div><!-- End Right side columns -->
 
     </div>
+
     </div>
     </section>
 
