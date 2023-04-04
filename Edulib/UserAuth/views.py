@@ -13,11 +13,20 @@ User = get_user_model()
 
 
 def index(request):
+    student_count = Student.student.count()
+    contributor_count = Contributor.contributor.count()
+    evaluator_count = Evaluator.evaluator.count()
+    context = {
+        "student_count": student_count,
+        "contributor_count": contributor_count,
+        "evaluator_count": evaluator_count,
+        "resources_count": 0
+    }
     if request.method == "POST":
         print("login type: ", request.POST["login_type"])
     if request.user.is_authenticated:
         return redirect("Contributor:dashboard")
-    return render(request, "index.html")
+    return render(request, "index.html", context)
 
 
 def login(request):
