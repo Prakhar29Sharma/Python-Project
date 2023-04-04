@@ -1,0 +1,112 @@
+{% extends 'Contributor/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+{% include 'Contributor/header.html' %}
+{% include 'Contributor/sidebar.html' %}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+    </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+    <div class="row">
+
+    <!-- Left side columns -->
+    <div class="col-lg-8">
+    <div class="row">
+
+
+    </div>
+    </div><!-- End Left side columns -->
+
+    <div class="row">
+
+        {% if user.isProfileComplete %}
+        <!-- contribution Card -->
+        <div class="col-xxl-20 col-md-">
+          <div class="card info-card sales-card">
+
+            <div class="card-body"><a href="#">
+              <h5 class="card-title">Get started with contributions </h5>
+
+              <div class="d-flex align-items-center">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+
+                  <i class='fas fa-handshake' style='font-size:36px'></i>
+                </div>
+                <div class="ps-3">
+                  <h6>  </h6>
+                  <span class="text-success small pt-1 fw-bold"></span> <span class="text-muted small pt-2 ps-1"></span>
+
+                </div>
+              </div></a>
+            </div>
+
+          </div>
+        </div><!-- End contributors Card -->
+        {% else %}
+        <!-- if profile not complete display warning -->
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-octagon me-1"></i>Complete your Profile and get started with contributions!
+          <a href="{% url 'Contributor:create_profile' %}" class="" >click here</a>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <!-- warning end -->
+        {% endif %}
+
+
+
+     <!-- rating Card -->
+     <div class="col-xxl-20 col-md-">
+      <div class="card info-card sales-card">
+
+        <div class="card-body"><a href="#">
+          <h5 class="card-title">Review and rate others contribution </h5>
+
+          <div class="d-flex align-items-center">
+            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+
+              <i class="fa fa-star checked"></i>
+              <span ></span>
+
+
+            </div>
+            <div class="ps-3">
+              <h6>  </h6>
+              <span class="text-success small pt-1 fw-bold"></span> <span class="text-muted small pt-2 ps-1"></span>
+
+            </div>
+          </div></a>
+        </div>
+
+      </div>
+    </div><!-- End rating Card -->
+
+
+    <!-- Right side columns -->
+    <div class="col-lg-4">
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Recent Contributions<span>| Today</span></h5>
+
+        </div><!-- End Recent Activity -->
+        </div>
+    </div><!-- End Right side columns -->
+
+    </div>
+
+    </div>
+    </section>
+
+</main><!-- End #main -->
+{% include 'Contributor/footer.html' %}
+{% endblock %}

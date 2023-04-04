@@ -13,9 +13,20 @@ User = get_user_model()
 
 
 def index(request):
+    student_count = Student.student.count()
+    contributor_count = Contributor.contributor.count()
+    evaluator_count = Evaluator.evaluator.count()
+    context = {
+        "student_count": student_count,
+        "contributor_count": contributor_count,
+        "evaluator_count": evaluator_count,
+        "resources_count": 0
+    }
+    if request.method == "POST":
+        print("login type: ", request.POST["login_type"])
     if request.user.is_authenticated:
-        return redirect("dashboard")
-    return redirect("/")
+        return redirect("Contributor:dashboard")
+    return render(request, "index.html", context)
 
 
 def login(request):
@@ -27,13 +38,16 @@ def login(request):
                 user = auth.authenticate(username=username, password=password)
                 if user is not None:
                     auth.login(request, user)
-                    return HttpResponse(f"<h1>You're logged in as {user.username}</h1>")
+                    if user.role.lower() == 'contributor':
+                        return redirect("Contributor:dashboard")
+                    else:
+                        return HttpResponse('<h1>404 PAge Not Found, Only Contributors part has been implemented!</h1>')
                 else:
                     messages.info(request, "invalid credentials")
-                    return redirect("login")
+                    return redirect("UserAuth:login")
             else:
                 messages.info(request, "please fill all the details")
-                return redirect("login")
+                return redirect("UserAuth:login")
         elif request.POST["login_type"] == "google":
             username = request.user.username
             email = request.user.email
@@ -48,8 +62,7 @@ def login(request):
                 # give new form to ask role
                 # save the data to database
                 # redirect to form with new view
-                return redirect("google_auth")
-
+                return redirect("UserAuth:google_auth")
 
     return HttpResponseRedirect("/accounts/google/login/")
 
@@ -66,10 +79,10 @@ def register(request):
                 if pass1 == pass2:
                     if User.objects.filter(email=email).exists():
                         messages.info(request, "Email Already Used")
-                        return redirect("register")
+                        return redirect("UserAuth:register")
                     elif User.objects.filter(username=username).exists():
                         messages.info(request, "Username already used")
-                        return redirect("register")
+                        return redirect("UserAuth:register")
                     else:
                         if role == "student":
                             student = Student.student.create_user(
@@ -84,23 +97,23 @@ def register(request):
                                 username=username, email=email, password=pass1
                             )
 
-                        return redirect('login')
+                        return redirect('UserAuth:login')
                 else:
                     messages.info(request, "Password didn't match")
-                    return redirect("register")
+                    return redirect("UserAuth:register")
             else:
                 messages.info(request, "please fill all the required details")
-                return redirect("register")
+                return redirect("UserAuth:register")
         else:
-            return redirect("register")
-    return render(request, "register.html")
+            return redirect("UserAuth:register")
+    return render(request, "UserAuth/register.html")
 
 
 def google_auth(request):
     if request.method == "POST":
         username = request.user.username
-        email = request.user.email
         role = request.POST["role"]
+        email = request.user.email
         if role is not None:
             if role == "student":
                 student = Student.student.create_user(
@@ -114,12 +127,17 @@ def google_auth(request):
                 evaluator = Evaluator.evaluator.create_user(
                     username=username, email=email, password=None
                 )
+            return redirect("UserAuth:login")
         else:
             messages.info(request, "please select a role to continue")
-            return redirect("google__auth")
+            return redirect("UserAuth:google_auth")
 
-    return render(request, "google_auth.html")
+    return render(request, "UserAuth/google_auth.html")
 
+
+def logout_view(request):
+    logout(request)
+    return redirect('UserAuth:index')
 
 # def login(request):
 #     if request.method == "POST":
@@ -144,4 +162,4 @@ def google_auth(request):
 
 # @login_required(login_url="/login/")
 # def dashboard(request):
-#     return render(request, "dashboard.html")
+#     return render(request, "index.html")
