@@ -13,13 +13,14 @@
     <div class="container"><a class="navbar-brand d-flex align-items-center" href="/"><span>Edulib</span></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link active" href="{% url 'index' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'UserAuth:index' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
             </ul>
+
             <a class="btn btn-primary shadow" role="button" href="{% provider_login_url 'google' %}">Login</a>
             &nbsp;
-            <a class="btn btn-primary shadow" role="button" href="{% url 'register' %}">Register</a>
+            <a class="btn btn-primary shadow" role="button" href="{% url 'UserAuth:register' %}">Register</a>
         </div>
     </div>
 </nav>
@@ -174,22 +175,22 @@
                     <p class="text-muted py-4 py-md-0">Numbers say it all</p>
                     <div class="row gy-4 row-cols-2 row-cols-md-2">
                         <div class="col">
-                            <div><span class="fs-2 fw-bold text-primary bg-warning">200+</span>
+                            <div><span class="fs-2 fw-bold text-primary bg-warning">{{student_count}}+</span>
                                 <p class="fw-normal text-muted">Students</p>
                             </div>
                         </div>
                         <div class="col">
-                            <div><span class="fs-2 fw-bold text-primary bg-warning">100+</span>
-                                <p class="fw-normal text-muted">Resources</p>
+                            <div><span class="fs-2 fw-bold text-primary bg-warning">{{resources_count}}+</span>
+                                <p class="fw-normal text-muted">Courses</p>
                             </div>
                         </div>
                         <div class="col">
-                            <div><span class="fs-2 fw-bold text-primary bg-warning">123+</span>
-                                <p class="fw-normal text-muted">Educators</p>
+                            <div><span class="fs-2 fw-bold text-primary bg-warning">{{contributor_count}}+</span>
+                                <p class="fw-normal text-muted">Contributors</p>
                             </div>
                         </div>
                         <div class="col">
-                            <div><span class="fs-2 fw-bold text-primary bg-warning">123+</span>
+                            <div><span class="fs-2 fw-bold text-primary bg-warning">{{evaluator_count}}+</span>
                                 <p class="fw-normal text-muted">Evaluators</p>
                             </div>
                         </div>
@@ -207,7 +208,7 @@
                     <div class="text-white p-4 p-md-5">
                         <h2 class="fw-bold text-white mb-3">Edulib</h2>
                         <p class="mb-4">An OER platform for MU Students</p>
-                        <div class="my-3"><a class="btn btn-warning me-2 mt-2" role="button" href="#">Login</a><a class="btn btn-light mt-2" role="button" href="#">Explore Courses</a></div>
+                        <div class="my-3"><a class="btn btn-warning me-2 mt-2" role="button" href="{% provider_login_url 'google' %}">Login</a><a class="btn btn-light mt-2" role="button" href="#">Explore Courses</a></div>
                     </div>
                 </div>
                 <div class="col-md-6 order-first order-md-last" style="min-height: 250px;"><img class="w-100 h-100 fit-contain pt-5 pt-md-0" src="{% static 'assets/img/illustrations/web-development.svg' %}"></div>
@@ -304,7 +305,8 @@
         </div>
     </div>
 </footer>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/startup-modern.js"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/startup-modern.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
 </body>
 </html>

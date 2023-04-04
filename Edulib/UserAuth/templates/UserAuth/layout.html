@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        {% include 'UserAuth/navbar.html' %}
+        <br/>
+        <br/>
+        <br/>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>
