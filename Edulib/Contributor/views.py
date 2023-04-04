@@ -5,6 +5,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from .forms import ContributorProfileForm
+from .models import ContributorProfile
 
 # Create your views here.
 
@@ -43,3 +44,9 @@ class CreateProfileView(View):
         return super().dispatch(*args, **kwargs)
 
 
+class ViewProfile(View):
+       def get(self, request):
+           all_ContributorProfile = ContributorProfile.objects.all
+           return render(request, "Contributor/ViewProfile.html",{'all':all_ContributorProfile})
+     
+    

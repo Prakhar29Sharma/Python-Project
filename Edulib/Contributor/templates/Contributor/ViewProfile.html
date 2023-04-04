@@ -1,0 +1,41 @@
+{% extends 'Contributor/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+{% include 'Contributor/header.html' %}
+{% include 'Contributor/sidebar.html' %}
+
+<!-- title -->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+    <h1>Your Profile</h1>
+    <nav>
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item active">Profile</li>
+    </ol>
+    </nav>
+    </div>
+<!-- End Page Title -->
+
+{% for item in all %}
+<div class="card" style="width: 18rem; text-emphasis: 2px;">
+    <div class="card-header">
+        <strong>
+        {{item.first_name}} {{item.last_name}} {{last_name}}
+    </strong>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Email: {{item.email}}</li>
+      <li class="list-group-item">Date Of birth: {{item.dob}}</li>
+      <li class="list-group-item"></li>
+    </ul>
+  </div>
+
+
+
+</p>
+
+{% endfor %}
+{% include 'Contributor/footer.html' %}
+{% endblock %}

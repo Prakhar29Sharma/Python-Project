@@ -58,5 +58,5 @@ class ContributorProfile(models.Model):
     github_profile = models.URLField(max_length=200)
     portfolio_website = models.URLField(max_length=200)
 
-
-
+# def __str__(self):
+#     return self.fname + '' + self.lname + '' +self.email
