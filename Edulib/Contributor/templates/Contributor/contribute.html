@@ -1,0 +1,143 @@
+{% extends 'Contributor/base.html' %}
+{% load static %}
+{% block title %}Contribute{% endblock %}
+
+{% block body %}
+    {% include 'Contributor/header.html' %}
+    {% include 'Contributor/sidebar.html' %}
+
+<main id="main" class="main">
+
+        <div class="pagetitle">
+        <h1>Contribute</h1>
+        <nav>
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Contribute</li>
+        </ol>
+        </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+        <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+        <div class="row">
+
+
+        </div>
+        </div><!-- End Left side columns -->
+
+        <div class="row">
+
+            {% if user.isProfileComplete == False %}
+            <!-- contribution Card -->
+            <div class="col-xxl-20 col-md-">
+              <div class="card info-card sales-card">
+
+                <div class="card-body"><a href="#">
+                  <h5 class="card-title">Get started with contributions </h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <a href="#"><i class='fas fa-plus' style='font-size:36px'></i></a>
+                    </div>
+                    <div class="ps-3">
+                      <h6>  </h6>
+                      <span class="text-success small pt-1 fw-bold"></span> <span class="text-muted small pt-2 ps-1"></span>
+
+                    </div>
+                  </div></a>
+                </div>
+
+              </div>
+            </div><!-- End contributors Card -->
+            {% else %}
+            <!-- if profile not complete display warning -->
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-octagon me-1"></i>Complete your Profile and get started with contributions!
+              <a href="{% url 'Contributor:create_profile' %}" class="" >click here</a>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <!-- warning end -->
+            {% endif %}
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Drafts</h5>
+
+                    <!--show drafts -->
+                    {% if drafts %}
+                        <!-- Card with an image on left -->
+                          <div class="card mb-3">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                <img src="https://prod-discovery.edx-cdn.org/media/programs/card_images/e250b08e-be2a-4b48-a43c-c9ae47f6cf14-a3f24d7ea4f3.jpg" class="img-fluid rounded-start" alt="course">
+                              </div>
+                              <div class="col-md-8">
+                                <div class="card-body">
+                                  <h5 class="card-title">Python Programming</h5>
+                                  <p class="card-text">This course is for python programming</p>
+
+                                    <a href="#">Edit</a>
+                                    &nbsp;
+                                    <a href="#">Delete</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div><!-- End Card with an image on left -->
+                    <!-- Card with an image on left -->
+                          <div class="card mb-3">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                <img src="https://prod-discovery.edx-cdn.org/media/programs/card_images/e250b08e-be2a-4b48-a43c-c9ae47f6cf14-a3f24d7ea4f3.jpg" class="img-fluid rounded-start" alt="course">
+                              </div>
+                              <div class="col-md-8">
+                                <div class="card-body">
+                                  <h5 class="card-title">Python Programming</h5>
+                                  <p class="card-text">This course is for python programming</p>
+
+                                    <a href="#">Edit</a>
+                                    &nbsp;
+                                    <a href="#">Delete</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div><!-- End Card with an image on left -->
+                    <!-- Card with an image on left -->
+                          <div class="card mb-3">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                <img src="https://www.k12courses.com/media/catalog/product/cache/1/thumbnail/600x600/9df78eab33525d08d6e5fb8d27136e95/t/c/tch343_1.png" class="img-fluid rounded-start" alt="course">
+                              </div>
+                              <div class="col-md-8">
+                                <div class="card-body">
+                                  <h5 class="card-title">Python Programming</h5>
+                                  <p class="card-text">This course is for python programming</p>
+                                    <a href="#">Edit</a>
+                                    &nbsp;
+                                    <a href="#">Delete</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div><!-- End Card with an image on left -->
+                    {% else %}
+                    <p>There's nothing to show!</p>
+                    {% endif %}
+
+            </div><!-- End Recent Activity -->
+            </div>
+        </div><!-- End Right side columns -->
+
+        </div>
+
+        </div>
+        </section>
+
+    </main><!-- End #main -->
+    {% include 'Contributor/footer.html' %}
+{% endblock %}

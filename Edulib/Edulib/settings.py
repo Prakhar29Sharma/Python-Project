@@ -151,7 +151,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-SITE_ID = 5
+SITE_ID = 2
 
 AUTH_USER_MODEL = "UserAuth.User"
 

@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.http import HttpResponse
@@ -21,22 +23,35 @@ class DashboardView(TemplateView):
         return super().dispatch(*args, **kwargs)
 
 
+class ContributeView(View):
+    template_name = "Contributor/contribute.html"
+
+    def get(self, request):
+        drafts = {
+            "drafts": {
+                "title": "Title1"
+            }
+        }
+        return render(request, self.template_name, drafts)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
 class CreateProfileView(View):
     form_class = ContributorProfileForm
     template_name = 'Contributor/create_profile.html'
 
     def get(self, request):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        subjects = []
+        return render(request, self.template_name)
 
     def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            # link uid and email to profile
-            form.save()
-            # set isProfileComplete to true from false
-            return HttpResponse("Your profile is created!")
-        return render(request, self.template_name, {'form': form})
+        post_data = dict(request.POST)
+        json_data = json.dumps(post_data)
+        print(json_data)
+        return render(request, self.template_name)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
