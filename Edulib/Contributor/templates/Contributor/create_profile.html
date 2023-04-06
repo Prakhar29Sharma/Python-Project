@@ -9,21 +9,158 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-        <h1>Complete Profile</h1>
+        <h1>Create Profile</h1>
         <nav>
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
-        <li class="breadcrumb-item active">Complete Profile</li>
+        <li class="breadcrumb-item active">Create Profile</li>
         </ol>
         </nav>
         </div><!-- End Page Title -->
 
-        <section class="section dashboard">
-        <form method="post">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button type="submit">Submit</button>
-        </form>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Create Profile</h5>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="row mb-3">
+                                  <label for="username" class="col-sm-2 col-form-label">Username</label>
+                                  <div class="col-sm-10">
+                                    <input name="username" id="username" type="text" class="form-control" value="{{ user.username }}" disabled>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
+                                  <div class="col-sm-10">
+                                    <input name="first_name" id="first_name" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
+                                  <div class="col-sm-10">
+                                    <input name="last_name" id="last_name" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="email" class="col-sm-2 col-form-label">Email</label>
+                                  <div class="col-sm-10">
+                                    <input name="email" id="email" type="email" class="form-control" value="{{user.email}}" disabled>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="dob" class="col-sm-2 col-form-label">DOB</label>
+                                  <div class="col-sm-10">
+                                    <input name="dob" id="dob" type="date" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="phone_number" class="col-sm-2 col-form-label">Phone Number</label>
+                                  <div class="col-sm-10">
+                                    <input name="phone_number" id="phone_number" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="city" class="col-sm-2 col-form-label">City</label>
+                                  <div class="col-sm-10">
+                                    <input name="city" id="city" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label class="col-sm-2 col-form-label">College</label>
+                                  <div class="col-sm-10">
+                                    <select name="college" class="form-select" aria-label="Default select example" required>
+                                      <option selected>Open this select menu</option>
+                                      <option value="College 1">College 1</option>
+                                      <option value="College 2">College 2</option>
+                                      <option value="College 3">College 3</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label class="col-sm-2 col-form-label">University</label>
+                                  <div class="col-sm-10">
+                                    <select name="university" class="form-select" aria-label="Default select example" required>
+                                      <option selected>Open this select menu</option>
+                                      <option value="University 1">University 1</option>
+                                      <option value="University 2">University 2</option>
+                                      <option value="University 3">University 3</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="qualification" class="col-sm-2 col-form-label">Qualification</label>
+                                  <div class="col-sm-10">
+                                    <input name="qualification" id="qualification" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="year_of_exp" class="col-sm-2 col-form-label">Years of Experience</label>
+                                  <div class="col-sm-10">
+                                    <input name="years_of_exp" id="year_of_exp" type="number" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label class="col-sm-2 col-form-label">Subjects to Contribute</label>
+                                  <div class="col-sm-10">
+
+                                    <select name="subjects_to_contrib" class="form-select" multiple aria-label="multiple select example" required>
+                                      <option value="DSA">DSA</option>
+                                      <option value="Python">Python Programming</option>
+                                      <option value="Unix">Unix</option>
+                                        <option value="DBMS">DBMS</option>
+                                        <option value="CN">Computer Networks</option>
+                                        <option value="COA">Computer Organization and Architecture</option>
+                                        <option value="OS">Operating Systems</option>
+                                        <option value="Java">Java Programming</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label class="col-sm-2 col-form-label">Subjects of Interest</label>
+                                  <div class="col-sm-10">
+                                    <select name="subjects_of_interest" class="form-select" multiple aria-label="multiple select example" required>
+                                      <option value="DSA">DSA</option>
+                                      <option value="Python">Python Programming</option>
+                                      <option value="Unix">Unix</option>
+                                        <option value="DBMS">DBMS</option>
+                                        <option value="CN">Computer Networks</option>
+                                        <option value="COA">Computer Organization and Architecture</option>
+                                        <option value="OS">Operating Systems</option>
+                                        <option value="Java">Java Programming</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="linked_in" class="col-sm-2 col-form-label">Linked Profile</label>
+                                  <div class="col-sm-10">
+                                    <input name="linkedin" id="linked_in" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="github" class="col-sm-2 col-form-label">Github Profile</label>
+                                  <div class="col-sm-10">
+                                    <input name="github" id="github" type="text" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="portfolio" class="col-sm-2 col-form-label">Portfolio Website</label>
+                                  <div class="col-sm-10">
+                                    <input name="portfolio" id="portfolio" type="text" class="form-control">
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary">Submit Form</button>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
     </main><!-- End #main -->
