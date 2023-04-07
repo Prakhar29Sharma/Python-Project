@@ -1,5 +1,6 @@
 from django import forms
-from .models import ContributorProfile
+from .models import ContributorProfile, CourseContent
+from ckeditor.widgets import CKEditorWidget
 
 SUBJECTS_TO_CONTRIBUTE = [
     ('', 'Choose...'),
@@ -37,3 +38,9 @@ class ContributorProfileForm(forms.ModelForm):
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date'})
         }
+
+
+class CreateContentForm(forms.ModelForm):
+    class Meta:
+        model = CourseContent
+        fields = '__all__'

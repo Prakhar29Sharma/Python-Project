@@ -1,0 +1,103 @@
+{% extends 'Contributor/base.html' %}
+
+{% block title %}Course{% endblock %}
+
+{% block body %}
+    {% include 'Contributor/header.html' %}
+    {% include 'Contributor/sidebar.html' %}
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+        <h1>Course</h1>
+        <nav>
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Create Course</li>
+            <li class="breadcrumb-item active">{{ subject }}</li>
+            <li class="breadcrumb-item active">{{ unit }}</li>
+        </ol>
+        </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Create Course</h5>
+
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="row mb-3">
+                                  <label for="course_title" class="col-sm-2 col-form-label">Course Title</label>
+                                  <div class="col-sm-10">
+                                    <input name="course_title" id="course_title" type="text" class="form-control" placeholder="Course Title, Ex: Python OOPs Concepts" required>
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <label for="subject" class="col-sm-2 col-form-label">Subject</label>
+                                  <div class="col-sm-10">
+                                    <input name="subject" id="subject" type="text" class="form-control" value="{{ subject }} " disabled>
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <label for="unit" class="col-sm-2 col-form-label">Unit</label>
+                                  <div class="col-sm-10">
+                                    <input name="unit" id="unit" type="text" class="form-control" value="{{ unit }} " disabled>
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <label for="course_desc" class="col-sm-2 col-form-label">Course Description</label>
+                                  <div class="col-sm-10">
+                                    <textarea id="course_desc" class="form-control" style="height: 100px" placeholder="Course Description, Ex: This course will help you build foundation in DSA"></textarea>
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <label for="course_objectives" class="col-sm-2 col-form-label">Course Objective</label>
+                                  <div class="col-sm-10">
+                                    <input name="course_objectives" id="course_objectives" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <label for="course_prerequisite" class="col-sm-2 col-form-label">Prerequisites </label>
+                                  <div class="col-sm-10">
+                                    <input name="course_prerequisite" id="course_prerequisite" type="text" class="form-control" required>
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <label for="course_video" class="col-sm-2 col-form-label">Course Video</label>
+                                  <div class="col-sm-10">
+                                    <input name="course_video" id="course_video" type="file" class="form-control" required>
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <div class="col-sm-10">
+                                    {{form.media}} {{form.as_p}}
+                                  </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                  <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary">Submit For Review</button>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+
+    {% include 'Contributor/footer.html' %}
+{% endblock %}
+
