@@ -1,0 +1,100 @@
+{% extends 'Contributor/base.html' %}
+
+{% block title %}Course{% endblock %}
+
+{% block body %}
+    {% include 'Contributor/header.html' %}
+    {% include 'Contributor/sidebar.html' %}
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+        <h1>Course</h1>
+        <nav>
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Create Course</li>
+        </ol>
+        </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Create Course</h5>
+
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="row mb-3">
+                                  <label class="col-sm-2 col-form-label">Subject</label>
+                                  <div class="col-sm-10">
+                                    <select name="subject" id="subject" class="form-select" aria-label="Default select example" required>
+                                      <option>Select Subject</option>
+                                      <option value="DSA">DSA</option>
+                                      <option value="DBMS">DBMS</option>
+                                      <option value="CN">CN</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label class="col-sm-2 col-form-label">Unit</label>
+                                  <div class="col-sm-10">
+                                    <select name="unit" id="unit" class="form-select" aria-label="Default select example" required>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary">Continue</button>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+
+    <script>
+      const subjectDropdown = document.getElementById('subject');
+      const unitDropdown = document.getElementById('unit');
+      const dsaUnits = ['Arrays', 'Stack', 'Queues', 'Graphs', 'Trees']
+      const dbmsUnits = ['MySQL', 'MongoDB', 'SQLite']
+      const cnUnits = ['Network Devices', 'OSI Model', 'Protocols', 'TCP/IP']
+
+      subjectDropdown.addEventListener('change', function() {
+        const selectedSubject = subjectDropdown.value;
+        unitDropdown.innerHTML = '';
+        if (selectedSubject === 'DSA') {
+            for (let i = 0; i < dsaUnits.length; i++) {
+              const option = document.createElement('option');
+              option.text = dsaUnits[i];
+              option.value = dsaUnits[i];
+              unitDropdown.add(option);
+            }
+          } else if (selectedSubject === 'DBMS') {
+            for (let i = 0; i < dbmsUnits.length; i++) {
+              const option = document.createElement('option');
+              option.text = dbmsUnits[i];
+              option.value = dbmsUnits[i];
+              unitDropdown.add(option);
+            }
+          } else if (selectedSubject === 'CN') {
+            for (let i = 0; i < cnUnits.length; i++) {
+              const option = document.createElement('option');
+              option.text = cnUnits[i];
+              option.value = cnUnits[i];
+              unitDropdown.add(option);
+            }
+          }
+      });
+    </script>
+
+    {% include 'Contributor/footer.html' %}
+{% endblock %}
+

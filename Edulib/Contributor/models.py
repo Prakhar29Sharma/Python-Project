@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 # Create your models here.
-
+from ckeditor.fields import RichTextField
 User = get_user_model()
 
 
@@ -58,5 +58,9 @@ class ContributorProfile(models.Model):
     github_profile = models.URLField(max_length=200)
     portfolio_website = models.URLField(max_length=200)
 
-# def __str__(self):
-#     return self.fname + '' + self.lname + '' +self.email
+
+class CourseContent(models.Model):
+    body = RichTextField(blank=True, null=True)
+
+
+
