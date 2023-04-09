@@ -7,8 +7,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .forms import ContributorProfileForm, CreateContentForm
+from .forms import CreateContentForm
+from .models import ContributorProfile
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 # Create your views here.
 
@@ -58,6 +61,11 @@ class CreateContentView(View):
         }
         return render(request, self.template_name, context)
 
+    def post(self, request, *args, **kwargs):
+        post_data = dict(request.POST)
+        print(post_data)
+        return HttpResponse(f"<p>{post_data}</p>")
+
 
 class ContributeView(View):
     template_name = "Contributor/contribute.html"
@@ -76,17 +84,30 @@ class ContributeView(View):
 
 
 class CreateProfileView(View):
-    form_class = ContributorProfileForm
     template_name = 'Contributor/create_profile.html'
+    context = {
+        "subjects": [
+            "DSA",
+            "DBMS",
+            "CN",
+        ]
+    }
 
     def get(self, request):
-        return render(request, self.template_name)
+
+        user = User.objects.get(email=request.user.email)
+        profile = ContributorProfile.objects.get(uid=user)
+        if profile is not None:
+            return redirect("Contributor:dashboard")
+        return render(request, self.template_name, self.context)
 
     def post(self, request):
         post_data = dict(request.POST)
         json_data = json.dumps(post_data)
         print(json_data)
 
+        username = request.user.username
+        email = request.user.email
         first_name = post_data["first_name"][0]
         last_name = post_data["last_name"][0]
         dob = post_data["dob"][0]
@@ -96,15 +117,21 @@ class CreateProfileView(View):
         university = post_data["university"][0]
         qualification = post_data["qualification"][0]
         years_of_experience = post_data["years_of_exp"][0]
-        subjects_to_contribute = post_data["subjects_to_contribute"]
+        subjects_to_contribute = post_data["subjects_to_contrib"]
         subjects_of_interest = post_data["subjects_of_interest"]
         linkedin_profile = post_data["linkedin"][0]
         github_profile = post_data["github"][0]
         portfolio_website = post_data["portfolio"][0]
 
-        profile = CreateContentForm()
+        user = User.objects.get(email=email)
 
-        return render(request, self.template_name)
+        profile = ContributorProfile(uid=user, first_name=first_name, last_name=last_name, email=email, dob=dob, phone_number=phone_number, city=city, college=college, university=university, qualification=qualification, years_of_experience=years_of_experience, subjects_to_contribute=subjects_to_contribute, subjects_of_interest=subjects_of_interest,linkedin_profile=linkedin_profile, github_profile=github_profile, portfolio_website=portfolio_website)
+        profile.save()
+
+        user.isProfileComplete = True
+        user.save()
+
+        return render(request, self.template_name, self.context)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

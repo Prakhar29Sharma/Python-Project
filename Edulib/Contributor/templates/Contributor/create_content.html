@@ -2,6 +2,17 @@
 
 {% block title %}Course{% endblock %}
 
+{% block extra_head %}
+    <!-- for dynaice textfield adding jquery-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <style>
+        #rowAdder {
+            margin-left: 17px;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     {% include 'Contributor/header.html' %}
     {% include 'Contributor/sidebar.html' %}
@@ -57,10 +68,21 @@
                                   </div>
                                 </div>
 
+<!--                                <div class="row mb-3">-->
+<!--                                  <label for="course_objectives" class="col-sm-2 col-form-label">Course Objective</label>-->
+<!--                                  <div class="col-sm-10">-->
+<!--                                    <input name="course_objectives" id="course_objectives" type="text" class="form-control" required>-->
+<!--                                  </div>-->
+<!--                                </div>-->
                                 <div class="row mb-3">
-                                  <label for="course_objectives" class="col-sm-2 col-form-label">Course Objective</label>
-                                  <div class="col-sm-10">
-                                    <input name="course_objectives" id="course_objectives" type="text" class="form-control" required>
+                                    <div class="field_wrapper">
+                                      <div class="form-control col-xs-2">
+                                        <label>Course Objectives :</label>
+
+                                          <input type="text" name="field_name[]" value="" />
+                                          <a href="javascript:void(0);" class="add_button btn btn-outline-success" title="Add field">
+                                            <span class="bi bi-plus-lg"></span></a>
+                                        </div>
                                   </div>
                                 </div>
 
@@ -99,5 +121,31 @@
     </main><!-- End #main -->
 
     {% include 'Contributor/footer.html' %}
+    <script>
+        $(document).ready(function(){
+            var maxField = 5; //Input fields increment limitation
+            var addButton = $('.add_button'); //Add button selector
+            var wrapper = $('.field_wrapper'); //Input field wrapper
+            var fieldHTML = '<div class="field_wrapper form-control col-xs-2"><input type="text" name="field_name[]" value=""/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a></div>'; //New input field html
+            var x = 1; //Initial field counter is 1
+
+            //Once add button is clicked
+            $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){
+                    x++; //Increment field counter
+                    $(wrapper).append(fieldHTML); //Add field html
+                }
+            });
+
+            //Once remove button is clicked
+            $(wrapper).on('click', '.remove_button', function(e){
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                x--; //Decrement field counter
+            });
+        });
+
+    </script>
 {% endblock %}
 
