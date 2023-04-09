@@ -90,7 +90,11 @@ class DisplayProfileView(View):
     def get(self, request):
         user = User.objects.get(username=request.user.username, email=request.user.email)
         if user.isProfileComplete:
-            return render(request, self.template_name)
+            profile = ContributorProfile.objects.get(uid=user)
+            context = {
+                "profile": profile
+            }
+            return render(request, self.template_name, context)
         else:
             return redirect('Contributor:dashboard')
 
