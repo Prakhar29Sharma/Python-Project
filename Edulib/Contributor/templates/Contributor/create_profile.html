@@ -102,19 +102,17 @@
                                     <input name="years_of_exp" id="year_of_exp" type="number" class="form-control" required>
                                   </div>
                                 </div>
+
+                                {% if subjects %}
+
                                 <div class="row mb-3">
                                   <label class="col-sm-2 col-form-label">Subjects to Contribute</label>
                                   <div class="col-sm-10">
 
                                     <select name="subjects_to_contrib" class="form-select" multiple aria-label="multiple select example" required>
-                                      <option value="DSA">DSA</option>
-                                      <option value="Python">Python Programming</option>
-                                      <option value="Unix">Unix</option>
-                                        <option value="DBMS">DBMS</option>
-                                        <option value="CN">Computer Networks</option>
-                                        <option value="COA">Computer Organization and Architecture</option>
-                                        <option value="OS">Operating Systems</option>
-                                        <option value="Java">Java Programming</option>
+                                        {% for subject in subjects %}
+                                            <option value="{{subject}}">{{subject}}</option>
+                                        {% endfor %}
                                     </select>
                                   </div>
                                 </div>
@@ -122,17 +120,15 @@
                                   <label class="col-sm-2 col-form-label">Subjects of Interest</label>
                                   <div class="col-sm-10">
                                     <select name="subjects_of_interest" class="form-select" multiple aria-label="multiple select example" required>
-                                      <option value="DSA">DSA</option>
-                                      <option value="Python">Python Programming</option>
-                                      <option value="Unix">Unix</option>
-                                        <option value="DBMS">DBMS</option>
-                                        <option value="CN">Computer Networks</option>
-                                        <option value="COA">Computer Organization and Architecture</option>
-                                        <option value="OS">Operating Systems</option>
-                                        <option value="Java">Java Programming</option>
+                                        {% for subject in subjects %}
+                                            <option value="{{subject}}">{{subject}}</option>
+                                        {% endfor %}
                                     </select>
                                   </div>
                                 </div>
+
+                                {% endif %}
+
                                 <div class="row mb-3">
                                   <label for="linked_in" class="col-sm-2 col-form-label">Linked Profile</label>
                                   <div class="col-sm-10">

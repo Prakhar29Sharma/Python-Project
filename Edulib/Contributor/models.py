@@ -4,34 +4,15 @@ from django.contrib.auth import get_user_model
 from ckeditor.fields import RichTextField
 User = get_user_model()
 
-
-SUBJECTS_TO_CONTRIBUTE = [
-    ('', 'Choose...'),
+SUBJECTS = [
     ('DSA', 'DSA'),
-    ('Python Programming', 'Python Programming'),
-    ('Unix', 'Unix'),
     ('DBMS', 'DBMS'),
-    ('Computer Networks', 'Computer Networks'),
-    ('Computer Architecture', 'Computer Architecture'),
-    ('Operating Systems', 'Operating System'),
-    ('Java Programming', 'Java Programming'),
+    ('CN', 'CN'),
 ]
-
-INTERESTS = (
-    ('', 'Choose...'),
-    ('DSA', 'DSA'),
-    ('Python Programming', 'Python Programming'),
-    ('Unix', 'Unix'),
-    ('DBMS', 'DBMS'),
-    ('Computer Networks', 'Computer Networks'),
-    ('Computer Architecture', 'Computer Architecture'),
-    ('Operating Systems', 'Operating System'),
-    ('Java Programming', 'Java Programming'),
-)
 
 
 class ContributorProfile(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.CASCADE)
+    uid = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -43,16 +24,17 @@ class ContributorProfile(models.Model):
     qualification = models.CharField(max_length=50)
     years_of_experience = models.PositiveIntegerField()
     subjects_to_contribute = models.CharField(
-        choices=SUBJECTS_TO_CONTRIBUTE,
+        choices=SUBJECTS,
         max_length=50,
         blank=True,
         null=True
     )
     subjects_of_interest = models.CharField(
-        choices=INTERESTS,
+        choices=SUBJECTS,
         max_length=50,
         blank=True,
         null=True
+
     )
     linkedin_profile = models.URLField(max_length=200)
     github_profile = models.URLField(max_length=200)
