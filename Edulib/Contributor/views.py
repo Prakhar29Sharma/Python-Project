@@ -83,6 +83,22 @@ class ContributeView(View):
         return super().dispatch(*args, **kwargs)
 
 
+class DisplayProfileView(View):
+
+    template_name = 'Contributor/user_profile.html'
+
+    def get(self, request):
+        user = User.objects.get(username=request.user.username, email=request.user.email)
+        if user.isProfileComplete:
+            return render(request, self.template_name)
+        else:
+            return redirect('Contributor:dashboard')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
 class CreateProfileView(View):
     template_name = 'Contributor/create_profile.html'
     context = {
@@ -94,11 +110,18 @@ class CreateProfileView(View):
     }
 
     def get(self, request):
-
         user = User.objects.get(email=request.user.email)
-        profile = ContributorProfile.objects.get(uid=user)
-        if profile is not None:
-            return redirect("Contributor:dashboard")
+        print("hi")
+        try:
+            profile = ContributorProfile.objects.get(uid=user)
+            print(profile)
+            if profile is not None:
+                return redirect("Contributor:dashboard")
+            else:
+                return render(request, self.template_name, self.context)
+        except:
+            print("profile doesn't exist")
+
         return render(request, self.template_name, self.context)
 
     def post(self, request):
