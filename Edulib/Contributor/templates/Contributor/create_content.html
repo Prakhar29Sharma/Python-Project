@@ -1,6 +1,8 @@
+
 {% extends 'Contributor/base.html' %}
 
 {% block title %}Course{% endblock %}
+  <!-- Template Main CSS File -->
 
 {% block body %}
     {% include 'Contributor/header.html' %}
@@ -22,8 +24,8 @@
 
         <section class="section">
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="card">
+                <div class="col-lg-0">
+                    <div class="card " >
                         <div class="card-body">
                             <h5 class="card-title">Create Course</h5>
 
@@ -56,20 +58,43 @@
                                     <textarea id="course_desc" class="form-control" style="height: 100px" placeholder="Course Description, Ex: This course will help you build foundation in DSA"></textarea>
                                   </div>
                                 </div>
-
+                                <!-- start of dynamic textfield -->
                                 <div class="row mb-3">
-                                  <label for="course_objectives" class="col-sm-2 col-form-label">Course Objective</label>
-                                  <div class="col-sm-10">
-                                    <input name="course_objectives" id="course_objectives" type="text" class="form-control" required>
-                                  </div>
-                                </div>
+                                <div class="field_wrapper">
+                                  
+                                    <label for="course_obj" class="col-sm-2 col-form-label">Course Objectives</label>
+                                    <div class="input-group mb-3">
 
-                                <div class="row mb-3">
+                                      <a href="javascript:void(0);" class="add_button btn btn-outline-success" title="Add field">
+                                        <span class="bi bi-plus-lg"></span></a>
+                                    <input type="text" name="field_name[]" value="" class="form-control" />
+                                      
+                                    </div>
+                              </div>
+                            </div>
+
+                                <!-- <div class="row mb-3">
                                   <label for="course_prerequisite" class="col-sm-2 col-form-label">Prerequisites </label>
                                   <div class="col-sm-10">
                                     <input name="course_prerequisite" id="course_prerequisite" type="text" class="form-control" required>
                                   </div>
+                                </div> -->
+
+                                <!-- prerequisites -->
+                                <div class="row mb-3">
+                                  <div class="field_wrapper">
+                                    
+                                      <label for="course_obj" class="col-sm-2 col-form-label">Prerequisites</label>
+                                      <div class="input-group mb-3">
+  
+                                        <a href="javascript:void(0);" class="add_button btn btn-outline-success" title="Add field">
+                                          <span class="bi bi-plus-lg"></span></a>
+                                      <input type="text" name="field_name[]" value="" class="form-control" />
+                                        
+                                      </div>
                                 </div>
+                              </div>
+                              <!-- endof prerequisite -->
 
                                 <div class="row mb-3">
                                   <label for="course_video" class="col-sm-2 col-form-label">Course Video</label>
@@ -97,6 +122,60 @@
         </section>
 
     </main><!-- End #main -->
+
+   
+      <!-- style -->
+      <style>
+        
+ 
+        #rowAdder {
+            margin-left: 17px;
+        }
+    </style>
+    
+  
+
+    
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    var maxField = 6; //Input fields increment limitation
+    var addButton = $('.add_button'); //Add button selector
+    var wrapper = ('.field_wrapper'); //Input field wrapper
+    //var fieldHTML ='<div class="field_wrapper"><input type="text" name="field_name[]" value=""/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a></div>'; //New input field html 
+
+  var fieldHTML= '<div class="field_wrapper input-group mb-3"><a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a><input type="text" name="field_name[]" value="" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"/></div>'
+
+    var x = 1; //Initial field counter is 1
+    
+    //Once add button is clicked
+    // $(addButton).click(function(){
+    //     //Check maximum number of input fields
+    //     if(x < maxField){ 
+    //         x++; //Increment field counter
+    //         $theWrapper.append(fieldHTML); //Add field html
+    //     }
+    // });
+
+    $(addButton).click(function(){ //Once add button is clicked
+    var theWrapper = $(this).closest(wrapper);
+    var x = theWrapper.children().length;
+    if( x < maxField){ //Check maximum number of input fields
+      
+      theWrapper.append(fieldHTML);
+    }
+});
+    
+    //Once remove button is clicked
+    $(wrapper).on('click', '.remove_button', function(e){
+        e.preventDefault();
+        $(this).parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
+    });
+});
+
+</script>
 
     {% include 'Contributor/footer.html' %}
 {% endblock %}
