@@ -111,12 +111,10 @@ class ContributeView(View):
     template_name = "Contributor/contribute.html"
 
     def get(self, request):
-        drafts = {
-            "drafts": {
-                "title": "Title1"
-            }
+        context = {
+            "drafts": course_draft.find({"uid": request.user.pk})
         }
-        return render(request, self.template_name, drafts)
+        return render(request, self.template_name, context)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
