@@ -10,8 +10,14 @@ from django.contrib.auth.decorators import login_required
 from .forms import CreateContentForm
 from .models import ContributorProfile
 from django.contrib.auth import get_user_model
+from pymongo import MongoClient
 
 User = get_user_model()
+
+
+client = MongoClient("mongodb://localhost:27017/")
+mydb = client["my_database"]
+course_draft = mydb["course_draft"]
 
 # Create your views here.
 
@@ -71,7 +77,34 @@ class CreateContentView(View):
     def post(self, request, *args, **kwargs):
         post_data = dict(request.POST)
         print(post_data)
-        return HttpResponse(f"<p>{post_data}</p>")
+        username = request.user.username
+        user = User.objects.get(username=username)
+        uid = user.pk
+        course_title = post_data["course_title"][0]
+        subject = self.kwargs['subject']
+        unit = self.kwargs['unit']
+        course_description = post_data["course_description"][0]
+        objectives = post_data["objectives"]
+        prerequisites = post_data["prerequisites"]
+        course_video = post_data["course_video"][0]
+        body = post_data["body"][0]
+
+        document = {
+            "uid": uid,
+            "username": username,
+            "course_title": course_title,
+            "subject": subject,
+            "unit": unit,
+            "course_description": course_description,
+            "objectives": objectives,
+            "prerequisites": prerequisites,
+            "course_video": course_video,
+            "body": body
+        }
+
+        # mongodb
+        course_draft.insert_one(document)
+        return HttpResponse(f"<p>{post_data}, username: {username}, userid: {uid}</p>")
 
 
 class ContributeView(View):
@@ -156,7 +189,6 @@ class CreateProfileView(View):
         linkedin_profile = post_data["linkedin"][0]
         github_profile = post_data["github"][0]
         portfolio_website = post_data["portfolio"][0]
-
         user = User.objects.get(email=email)
 
         profile = ContributorProfile(uid=user, first_name=first_name, last_name=last_name, email=email, dob=dob, phone_number=phone_number, city=city, college=college, university=university, qualification=qualification, years_of_experience=years_of_experience, subjects_to_contribute=subjects_to_contribute, subjects_of_interest=subjects_of_interest,linkedin_profile=linkedin_profile, github_profile=github_profile, portfolio_website=portfolio_website)
@@ -173,5 +205,6 @@ class CreateProfileView(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+
 
 

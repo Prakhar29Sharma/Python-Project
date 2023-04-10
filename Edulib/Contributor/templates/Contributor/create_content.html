@@ -33,7 +33,7 @@
 
         <section class="section">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Create Course</h5>
@@ -64,7 +64,7 @@
                                 <div class="row mb-3">
                                   <label for="course_desc" class="col-sm-2 col-form-label">Course Description</label>
                                   <div class="col-sm-10">
-                                    <textarea id="course_desc" class="form-control" style="height: 100px" placeholder="Course Description, Ex: This course will help you build foundation in DSA"></textarea>
+                                    <textarea name="course_description" id="course_desc" class="form-control" style="height: 100px" placeholder="Course Description, Ex: This course will help you build foundation in DSA"></textarea>
                                   </div>
                                 </div>
 
@@ -75,23 +75,35 @@
 <!--                                  </div>-->
 <!--                                </div>-->
                                 <div class="row mb-3">
-                                    <div class="field_wrapper">
-                                      <div class="form-control col-xs-2">
-                                        <label>Course Objectives :</label>
-
-                                          <input type="text" name="field_name[]" value="" />
+                                  <label for="course_objectives" class="col-sm-2 col-form-label">Course Objectives</label>
+                                    <div class="field_wrapper ">
+                                      <div class="input-group mb-3">
                                           <a href="javascript:void(0);" class="add_button btn btn-outline-success" title="Add field">
-                                            <span class="bi bi-plus-lg"></span></a>
-                                        </div>
+                                          <span class="bi bi-plus-lg"></span></a>
+                                          <input id="course_objectives" type="text" name="objectives" value="" class="form-control " placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" />
+                                    </div>
                                   </div>
-                                </div>
+                                 </div>
 
+<!--                                <div class="row mb-3">-->
+<!--                                  <label for="course_prerequisite" class="col-sm-2 col-form-label">Prerequisites </label>-->
+<!--                                  <div class="col-sm-10">-->
+<!--                                    <input name="course_prerequisite" id="course_prerequisite" type="text" class="form-control" required>-->
+<!--                                  </div>-->
+<!--                                </div>-->
+
+                                <!-- prerequisites -->
                                 <div class="row mb-3">
-                                  <label for="course_prerequisite" class="col-sm-2 col-form-label">Prerequisites </label>
-                                  <div class="col-sm-10">
-                                    <input name="course_prerequisite" id="course_prerequisite" type="text" class="form-control" required>
+                                  <label for="course_prerequisite" class="col-sm-2 col-form-label">Course Prerequisite</label>
+                                    <div class="field_wrapper2">
+                                      <div class="input-group mb-3">
+                                          <a href="javascript:void(0);" class="add_button btn btn-outline-success" title="Add field">
+                                          <span class="bi bi-plus-lg"></span></a>
+                                          <input id="course_prerequisite" type="text" name="prerequisites" value="" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" />
+                                    </div>
                                   </div>
                                 </div>
+                              <!-- endof prerequisite -->
 
                                 <div class="row mb-3">
                                   <label for="course_video" class="col-sm-2 col-form-label">Course Video</label>
@@ -108,7 +120,7 @@
 
                                 <div class="row mb-3">
                                   <div class="col-sm-10">
-                                    <button type="submit" class="btn btn-primary">Submit For Review</button>
+                                    <button type="submit" class="btn btn-primary">Save as a draft</button>
                                   </div>
                                 </div>
                             </form>
@@ -121,31 +133,81 @@
     </main><!-- End #main -->
 
     {% include 'Contributor/footer.html' %}
-    <script>
-        $(document).ready(function(){
-            var maxField = 5; //Input fields increment limitation
-            var addButton = $('.add_button'); //Add button selector
-            var wrapper = $('.field_wrapper'); //Input field wrapper
-            var fieldHTML = '<div class="field_wrapper form-control col-xs-2"><input type="text" name="field_name[]" value=""/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a></div>'; //New input field html
-            var x = 1; //Initial field counter is 1
+    <script type="text/javascript">
 
-            //Once add button is clicked
-            $(addButton).click(function(){
-                //Check maximum number of input fields
-                if(x < maxField){
-                    x++; //Increment field counter
-                    $(wrapper).append(fieldHTML); //Add field html
-                }
-            });
+      $(document).ready(function(){
+          var maxField = 5; //Input fields increment limitation
+          var addButton = $('.add_button'); //Add button selector
+          var wrapper = ('.field_wrapper'); //Input field wrapper
+          //var fieldHTML ='<div class="field_wrapper"><input type="text" name="field_name[]" value=""/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a></div>'; //New input field html
 
-            //Once remove button is clicked
-            $(wrapper).on('click', '.remove_button', function(e){
-                e.preventDefault();
-                $(this).parent('div').remove(); //Remove field html
-                x--; //Decrement field counter
-            });
-        });
+        var fieldHTML= '<div class="field_wrapper "><div class="input-group mb-3"><a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a><input type="text" name="objectives" value="" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"/></div></div>'
 
-    </script>
+
+          var x = 1; //Initial field counter is 1
+
+          //Once add button is clicked
+          // $(addButton).click(function(){
+          //     //Check maximum number of input fields
+          //     if(x < maxField){
+          //         x++; //Increment field counter
+          //         $theWrapper.append(fieldHTML); //Add field html
+          //     }
+          // });
+
+          $(addButton).click(function(){ //Once add button is clicked
+          var theWrapper = $(this).closest(wrapper);
+          var x = theWrapper.children().length;
+          if( x < maxField){ //Check maximum number of input fields
+            theWrapper.append(fieldHTML);
+          }
+      });
+
+          //Once remove button is clicked
+          $(wrapper).on('click', '.remove_button', function(e){
+              e.preventDefault();
+              $(this).parent('div').remove(); //Remove field html
+              x--; //Decrement field counter
+          });
+      });
+
+      </script>
+        <script>
+            $(document).ready(function(){
+          var maxField = 5; //Input fields increment limitation
+          var addButton = $('.add_button'); //Add button selector
+          var wrapper = ('.field_wrapper2'); //Input field wrapper
+          //var fieldHTML ='<div class="field_wrapper"><input type="text" name="field_name[]" value=""/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a></div>'; //New input field html
+
+        var fieldHTML= '<div class="field_wrapper "><div class="input-group mb-3"><a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a><input type="text" name="prerequisites" value="" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"/></div></div>'
+
+
+          var x = 1; //Initial field counter is 1
+
+          //Once add button is clicked
+          // $(addButton).click(function(){
+          //     //Check maximum number of input fields
+          //     if(x < maxField){
+          //         x++; //Increment field counter
+          //         $theWrapper.append(fieldHTML); //Add field html
+          //     }
+          // });
+
+          $(addButton).click(function(){ //Once add button is clicked
+          var theWrapper = $(this).closest(wrapper);
+          var x = theWrapper.children().length;
+          if( x < maxField){ //Check maximum number of input fields
+            theWrapper.append(fieldHTML);
+          }
+      });
+
+          //Once remove button is clicked
+          $(wrapper).on('click', '.remove_button', function(e){
+              e.preventDefault();
+              $(this).parent('div').remove(); //Remove field html
+              x--; //Decrement field counter
+          });
+      });
+        </script>
 {% endblock %}
 
