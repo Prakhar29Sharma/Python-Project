@@ -29,11 +29,11 @@
               <h2>{{profile.first_name}} {{profile.last_name}}</h2>
               <h3>Contributor</h3>
               <div class="social-links mt-2">
-                  {% if profile.github %}
-                <a href="{{ profile.github }}" class="github"><i class="bi bi-github"></i></a>
+                  {% if profile.github_profile %}
+                <a href="{{profile.github_profile}}" class="github"><i class="bi bi-github"></i></a>
                   {% endif %}
-                  {% if profile.linked_in %}
-                <a href="{{ profile.linked_in }}" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                  {% if profile.linkedin_profile %}
+                <a href="{{profile.linkedin_profile}}" class="linkedin"><i class="bi bi-linkedin"></i></a>
                   {% endif %}
               </div>
             </div>

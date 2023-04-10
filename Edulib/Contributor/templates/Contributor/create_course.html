@@ -33,9 +33,11 @@
                                   <div class="col-sm-10">
                                     <select name="subject" id="subject" class="form-select" aria-label="Default select example" required>
                                       <option>Select Subject</option>
-                                      <option value="DSA">DSA</option>
-                                      <option value="DBMS">DBMS</option>
-                                      <option value="CN">CN</option>
+                                        {% if subjects %}
+                                            {% for subject in subjects %}
+                                                <option value="{{subject}}">{{subject}}</option>
+                                            {% endfor %}
+                                        {% endif %}
                                     </select>
                                   </div>
                                 </div>

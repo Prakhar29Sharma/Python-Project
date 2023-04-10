@@ -33,7 +33,14 @@ class CreateCourseView(View):
     template_name = "Contributor/create_course.html"
 
     def get(self, request):
-        return render(request, self.template_name)
+        profile = ContributorProfile.objects.get(email=request.user.email)
+        subjects = profile.subjects_to_contribute
+        subjects = subjects.replace("[", "").replace("]", "").replace("'", "")
+        subjects = subjects.split(", ")
+        context = {
+            "subjects": subjects
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request):
         subject = request.POST["subject"]
@@ -157,6 +164,9 @@ class CreateProfileView(View):
 
         user.isProfileComplete = True
         user.save()
+
+        if user.isProfileComplete:
+            return redirect("Contributor:dashboard")
 
         return render(request, self.template_name, self.context)
 
