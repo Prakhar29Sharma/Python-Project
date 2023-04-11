@@ -90,6 +90,12 @@
                                     <a href="#">Edit</a>
                                     &nbsp;
                                     <a href="#">Delete</a>
+
+                                    <form action="{% url 'Contributor:draft_view' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ draft.id }}"/>
+                                        <button class="btn btn-primary" type="submit" value="Submit">Open Draft</button>
+                                    </form>
                                 </div>
                               </div>
                             </div>

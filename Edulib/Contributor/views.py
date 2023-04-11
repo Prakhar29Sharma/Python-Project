@@ -11,6 +11,7 @@ from .forms import CreateContentForm
 from .models import ContributorProfile
 from django.contrib.auth import get_user_model
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 User = get_user_model()
 
@@ -107,12 +108,31 @@ class CreateContentView(View):
         return HttpResponse(f"<p>{post_data}, username: {username}, userid: {uid}</p>")
 
 
+class DraftView(View):
+    template_name = "Contributor/show_draft.html"
+    context = {}
+
+    def get(self, request):
+        self.context = {}
+        return render(request, self.template_name, self.context)
+
+    def post(self, request):
+        course_id = request.POST["course_id"]
+        uid = request.user.pk
+        _id = ObjectId(course_id)
+        draft = course_draft.find_one({"uid": uid, "_id": _id})
+        self.context = {
+            "draft": draft
+        }
+        return render(request, self.template_name, self.context)
+
+
 class ContributeView(View):
     template_name = "Contributor/contribute.html"
 
     def get(self, request):
         context = {
-            "drafts": course_draft.find({"uid": request.user.pk})
+            "drafts": course_draft.find({"uid": request.user.pk}),
         }
         return render(request, self.template_name, context)
 
