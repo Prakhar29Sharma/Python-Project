@@ -87,15 +87,10 @@
                                   <p style="font-size:10px; " class=""><span>{{ draft.subject }}</span> > <span>{{ draft.unit }}</span></p>
                                   <p class="card-text">{{ draft.course_description }}</p>
 
-                                    <a href="#">Edit</a>
+                                    <a href="{% url 'Contributor:draft_view' draft.course_id %}">Edit</a>
                                     &nbsp;
                                     <a href="#">Delete</a>
 
-                                    <form action="{% url 'Contributor:draft_view' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" value="{{ draft.id }}"/>
-                                        <button class="btn btn-primary" type="submit" value="Submit">Open Draft</button>
-                                    </form>
                                 </div>
                               </div>
                             </div>

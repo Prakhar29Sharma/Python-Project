@@ -12,6 +12,8 @@ from .models import ContributorProfile
 from django.contrib.auth import get_user_model
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import random
+import string
 
 User = get_user_model()
 
@@ -90,7 +92,12 @@ class CreateContentView(View):
         course_video = post_data["course_video"][0]
         body = post_data["body"][0]
 
+        letters = string.digits
+        course_id = ''.join(random.choice(letters) for i in range(10))
+        print("course id: ", id)
+
         document = {
+            "course_id": course_id,
             "uid": uid,
             "username": username,
             "course_title": course_title,
@@ -111,9 +118,18 @@ class CreateContentView(View):
 class DraftView(View):
     template_name = "Contributor/show_draft.html"
     context = {}
+    form = CreateContentForm()
 
-    def get(self, request):
-        self.context = {}
+    def get(self, request, course_id):
+        uid = request.user.pk
+        draft = course_draft.find_one({"uid": uid, "course_id": course_id})
+        text_editor_content = draft["body"]
+        self.form = CreateContentForm(initial={'body': text_editor_content})
+        self.context = {
+            "draft": draft,
+            "form": self.form,
+            # "course_content": text_editor_content
+        }
         return render(request, self.template_name, self.context)
 
     def post(self, request):
