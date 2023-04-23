@@ -1,5 +1,6 @@
 import datetime
 import json
+import os.path
 
 import requests
 from django.shortcuts import render, redirect, reverse
@@ -13,6 +14,7 @@ from .models import ContributorProfile
 from django.contrib.auth import get_user_model
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from django.http import FileResponse
 import random
 import string
 
@@ -104,6 +106,7 @@ class CreateContentView(View):
 
     def post(self, request, *args, **kwargs):
         post_data = dict(request.POST)
+        print(post_data)
         username = request.user.username
         user = User.objects.get(username=username)
         uid = user.pk
@@ -113,11 +116,19 @@ class CreateContentView(View):
         course_description = post_data["course_description"][0]
         objectives = post_data["objectives"]
         prerequisites = post_data["prerequisites"]
-        course_video = post_data["course_video"][0]
+        course_video = request.FILES["course_video"]
         body = post_data["body"][0]
 
         letters = string.digits
         course_id = ''.join(random.choice(letters) for i in range(10))
+
+        # handling video uploaded
+        original_name, extension = os.path.splitext(course_video.name)
+        new_file_name = str(uid) + str(course_id) + extension
+        path = '/home/prakhar/Edulib/Edulib/static/' + new_file_name
+        with open(path, 'wb+') as destination:
+            for chunk in course_video.chunks():
+                destination.write(chunk)
 
         document = {
             "course_id": course_id,
@@ -129,7 +140,7 @@ class CreateContentView(View):
             "course_description": course_description,
             "objectives": objectives,
             "prerequisites": prerequisites,
-            "course_video": course_video,
+            "course_video": new_file_name,
             "body": body
         }
 
@@ -150,10 +161,14 @@ class DraftView(View):
             count += 1
         uid = request.user.pk
         draft = course_draft.find_one({"uid": uid, "course_id": course_id})
+        video_name = draft["course_video"]
+        # path = os.path.join("/home/prakhar/Edulib/Edulib/static/", video_name)
+
         text_editor_content = draft["body"]
         self.form = CreateContentForm(initial={'body': text_editor_content})
         self.context = {
             "draft": draft,
+            "video": video_name,
             "form": self.form,
             "notifications": notifications.find({"uid": request.user.pk}),
             "notifications_count": count
@@ -182,7 +197,6 @@ class DraftView(View):
         else:
             prerequisites = post_data["prerequisites"]
 
-        course_video = post_data["course_video"][0]
         body = post_data["body"][0]
 
         new_document = {
@@ -195,7 +209,6 @@ class DraftView(View):
             "course_description": course_description,
             "objectives": objectives,
             "prerequisites": prerequisites,
-            "course_video": course_video,
             "body": body
         }
 
@@ -246,7 +259,6 @@ class CourseView(View):
             "course_content": courses.find_one({"uid": request.user.pk, "course_id": course_id})
         }
         return render(request, self.template_name, self.context)
-
 
 
 class ContributeView(View):

@@ -1,5 +1,5 @@
 {% extends 'Contributor/base.html' %}
-
+{% load static %}
 {% block title %}Course{% endblock %}
 
 {% block body %}
@@ -72,6 +72,19 @@
                                 </div>
 
                                 <div style="height:25px" class="row"></div>
+
+                                {% if course_content.course_video %}
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Course Video</div>
+                                    <video width="320" height="500" controls autoplay>
+                                          <source src="{% static course_content.course_video %}" type="video/mp4">
+                                          Your browser does not support the video tag.
+                                    </video>
+                                </div>
+
+                                <div style="height:25px" class="row"></div>
+                                {% endif %}
+
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Notes</div>

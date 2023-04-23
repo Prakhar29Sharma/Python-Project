@@ -38,7 +38,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Create Course</h5>
 
-                            <form method="post">
+                            <form method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="row mb-3">
                                   <label for="course_title" class="col-sm-2 col-form-label">Course Title</label>
@@ -108,7 +108,7 @@
                                 <div class="row mb-3">
                                   <label for="course_video" class="col-sm-2 col-form-label">Course Video</label>
                                   <div class="col-sm-10">
-                                    <input name="course_video" id="course_video" type="file" class="form-control">
+                                    <input name="course_video" id="course_video" type="file" accept="video/*" class="form-control">
                                   </div>
                                 </div>
 
