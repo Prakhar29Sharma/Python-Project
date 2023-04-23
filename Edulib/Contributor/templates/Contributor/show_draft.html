@@ -125,5 +125,11 @@
 
 
     {% include 'Contributor/footer.html' %}
+    <script>
+        window.onbeforeunload = function() {
+            var text = "confirm leaving contributions page!";
+            return text;
+        }
+    </script>
 {% endblock %}
 
