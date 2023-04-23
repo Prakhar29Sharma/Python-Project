@@ -108,7 +108,7 @@
                                   <p style="font-size:15px; " class=""><span>{{ course.subject }}</span> > <span>{{ course.unit }}</span></p>
                                   <p class="card-text">{{ course.course_description }}</p>
 
-                                    <a href="#"> View Course </a>
+                                    <a href="{% url 'Contributor:course_view' course.course_id %}"> View Course </a>
                                 </div>
                               </div>
                             </div>

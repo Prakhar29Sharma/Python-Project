@@ -1,0 +1,101 @@
+{% extends 'Contributor/base.html' %}
+
+{% block title %}Course{% endblock %}
+
+{% block body %}
+    {% include 'Contributor/header.html' %}
+    {% include 'Contributor/sidebar.html' %}
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+        <h1>Course</h1>
+        <nav>
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Course</li>
+        </ol>
+        </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-body">
+                            {% if course_content %}
+                                <h5 class="card-title" style="font-size:30px;">{{course_content.course_title}}</h5>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Subject</div>
+                                    <div class="col-lg-9 col-md-8">{{course_content.subject}}</div>
+                                </div>
+
+                                <div style="height:25px" class="row"></div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Unit</div>
+                                    <div class="col-lg-9 col-md-8">{{course_content.unit}}</div>
+                                </div>
+
+                                <div style="height:25px" class="row"></div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Course Description</div>
+                                    <div class="col-lg-9 col-md-8">{{course_content.course_description}}</div>
+                                </div>
+
+                                <div style="height:25px" class="row"></div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Course Objectives</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <ul>
+                                            {% for objectives in course_content.objectives %}
+                                                <li>{{objectives}}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div style="height:25px" class="row"></div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Course Prerequisites</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <ul>
+                                        {% for prerequisites in course_content.prerequisites %}
+                                            <li>{{prerequisites}}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div style="height:25px" class="row"></div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label" style="font-size:20px;">Notes</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        {{ course_content.body | safe }}
+                                    </div>
+                                </div>
+
+                                <div style="height:25px" class="row"></div>
+
+
+
+                            {% else %}
+                                <h5 class="card-title">Course Not Found!</h5>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+
+
+    {% include 'Contributor/footer.html' %}
+{% endblock %}
+

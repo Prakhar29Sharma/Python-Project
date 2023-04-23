@@ -237,6 +237,18 @@ class SubmitForReview(View):
         return redirect("Contributor:contribute")
 
 
+class CourseView(View):
+    template_name = "Contributor/show_course.html"
+    context = {}
+
+    def get(self, request, course_id):
+        self.context = {
+            "course_content": courses.find_one({"uid": request.user.pk, "course_id": course_id})
+        }
+        return render(request, self.template_name, self.context)
+
+
+
 class ContributeView(View):
     template_name = "Contributor/contribute.html"
 
