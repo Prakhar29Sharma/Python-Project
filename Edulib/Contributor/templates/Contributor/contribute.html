@@ -72,7 +72,9 @@
 
                     <!--show drafts -->
                     {% if drafts %}
-                        <!-- Card with an image on left -->
+
+                        {% for draft in drafts %}
+                            <!-- Card with an image on left -->
                           <div class="card mb-3">
                             <div class="row g-0">
                               <div class="col-md-4">
@@ -80,51 +82,20 @@
                               </div>
                               <div class="col-md-8">
                                 <div class="card-body">
-                                  <h5 class="card-title">Python Programming</h5>
-                                  <p class="card-text">This course is for python programming</p>
+                                  <h5 class="card-title">{{ draft.course_title }}</h5>
+                                    <hr>
+                                  <p style="font-size:10px; " class=""><span>{{ draft.subject }}</span> > <span>{{ draft.unit }}</span></p>
+                                  <p class="card-text">{{ draft.course_description }}</p>
 
-                                    <a href="#">Edit</a>
+                                    <a href="{% url 'Contributor:draft_view' draft.course_id %}">Edit</a>
                                     &nbsp;
                                     <a href="#">Delete</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div><!-- End Card with an image on left -->
-                    <!-- Card with an image on left -->
-                          <div class="card mb-3">
-                            <div class="row g-0">
-                              <div class="col-md-4">
-                                <img src="https://prod-discovery.edx-cdn.org/media/programs/card_images/e250b08e-be2a-4b48-a43c-c9ae47f6cf14-a3f24d7ea4f3.jpg" class="img-fluid rounded-start" alt="course">
-                              </div>
-                              <div class="col-md-8">
-                                <div class="card-body">
-                                  <h5 class="card-title">Python Programming</h5>
-                                  <p class="card-text">This course is for python programming</p>
 
-                                    <a href="#">Edit</a>
-                                    &nbsp;
-                                    <a href="#">Delete</a>
                                 </div>
                               </div>
                             </div>
                           </div><!-- End Card with an image on left -->
-                    <!-- Card with an image on left -->
-                          <div class="card mb-3">
-                            <div class="row g-0">
-                              <div class="col-md-4">
-                                <img src="https://www.k12courses.com/media/catalog/product/cache/1/thumbnail/600x600/9df78eab33525d08d6e5fb8d27136e95/t/c/tch343_1.png" class="img-fluid rounded-start" alt="course">
-                              </div>
-                              <div class="col-md-8">
-                                <div class="card-body">
-                                  <h5 class="card-title">Python Programming</h5>
-                                  <p class="card-text">This course is for python programming</p>
-                                    <a href="#">Edit</a>
-                                    &nbsp;
-                                    <a href="#">Delete</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div><!-- End Card with an image on left -->
+                        {% endfor %}
                     {% else %}
                     <p>There's nothing to show!</p>
                     {% endif %}

@@ -2,17 +2,6 @@
 
 {% block title %}Course{% endblock %}
 
-{% block extra_head %}
-    <!-- for dynaice textfield adding jquery-->
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">-->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <style>
-        #rowAdder {
-            margin-left: 17px;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
     {% include 'Contributor/header.html' %}
     {% include 'Contributor/sidebar.html' %}
@@ -24,9 +13,7 @@
         <nav>
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
-        <li class="breadcrumb-item active">Create Course</li>
-            <li class="breadcrumb-item active">{{ subject }}</li>
-            <li class="breadcrumb-item active">{{ unit }}</li>
+        <li class="breadcrumb-item active">Edit Draft</li>
         </ol>
         </nav>
         </div><!-- End Page Title -->
@@ -36,35 +23,35 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Create Course</h5>
-
-                            <form method="post">
+                            {% if draft %}
+                                <h5 class="card-title">Edit Draft</h5>
+                                <form method="post">
                                 {% csrf_token %}
                                 <div class="row mb-3">
                                   <label for="course_title" class="col-sm-2 col-form-label">Course Title</label>
                                   <div class="col-sm-10">
-                                    <input name="course_title" id="course_title" type="text" class="form-control" placeholder="Course Title, Ex: Python OOPs Concepts" required>
+                                    <input name="course_title" id="course_title" type="text" class="form-control" required value="{{draft.course_title}}">
                                   </div>
                                 </div>
 
                                 <div class="row mb-3">
                                   <label for="subject" class="col-sm-2 col-form-label">Subject</label>
                                   <div class="col-sm-10">
-                                    <input name="subject" id="subject" type="text" class="form-control" value="{{ subject }} " disabled>
+                                    <input name="subject" id="subject" type="text" class="form-control" value="{{ draft.subject }} " disabled>
                                   </div>
                                 </div>
 
                                 <div class="row mb-3">
                                   <label for="unit" class="col-sm-2 col-form-label">Unit</label>
                                   <div class="col-sm-10">
-                                    <input name="unit" id="unit" type="text" class="form-control" value="{{ unit }} " disabled>
+                                    <input name="unit" id="unit" type="text" class="form-control" value="{{ draft.unit }} " disabled>
                                   </div>
                                 </div>
 
                                 <div class="row mb-3">
                                   <label for="course_desc" class="col-sm-2 col-form-label">Course Description</label>
                                   <div class="col-sm-10">
-                                    <textarea name="course_description" id="course_desc" class="form-control" style="height: 100px" placeholder="Course Description, Ex: This course will help you build foundation in DSA"></textarea>
+                                    <textarea name="course_description" id="course_desc" class="form-control" style="height: 100px">{{ draft.course_description }}</textarea>
                                   </div>
                                 </div>
 
@@ -120,10 +107,14 @@
 
                                 <div class="row mb-3">
                                   <div class="col-sm-10">
-                                    <button type="submit" class="btn btn-primary">Save as a draft</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
                                   </div>
                                 </div>
                             </form>
+
+                            {% else %}
+                                <h5 class="card-title">Draft not found!</h5>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -132,82 +123,41 @@
 
     </main><!-- End #main -->
 
+    <script>
+      const subjectDropdown = document.getElementById('subject');
+      const unitDropdown = document.getElementById('unit');
+      const dsaUnits = ['Arrays', 'Stack', 'Queues', 'Graphs', 'Trees']
+      const dbmsUnits = ['MySQL', 'MongoDB', 'SQLite']
+      const cnUnits = ['Network Devices', 'OSI Model', 'Protocols', 'TCP/IP']
+
+      subjectDropdown.addEventListener('change', function() {
+        const selectedSubject = subjectDropdown.value;
+        unitDropdown.innerHTML = '';
+        if (selectedSubject === 'DSA') {
+            for (let i = 0; i < dsaUnits.length; i++) {
+              const option = document.createElement('option');
+              option.text = dsaUnits[i];
+              option.value = dsaUnits[i];
+              unitDropdown.add(option);
+            }
+          } else if (selectedSubject === 'DBMS') {
+            for (let i = 0; i < dbmsUnits.length; i++) {
+              const option = document.createElement('option');
+              option.text = dbmsUnits[i];
+              option.value = dbmsUnits[i];
+              unitDropdown.add(option);
+            }
+          } else if (selectedSubject === 'CN') {
+            for (let i = 0; i < cnUnits.length; i++) {
+              const option = document.createElement('option');
+              option.text = cnUnits[i];
+              option.value = cnUnits[i];
+              unitDropdown.add(option);
+            }
+          }
+      });
+    </script>
+
     {% include 'Contributor/footer.html' %}
-    <script type="text/javascript">
-
-      $(document).ready(function(){
-          var maxField = 5; //Input fields increment limitation
-          var addButton = $('.add_button'); //Add button selector
-          var wrapper = ('.field_wrapper'); //Input field wrapper
-          //var fieldHTML ='<div class="field_wrapper"><input type="text" name="field_name[]" value=""/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a></div>'; //New input field html
-
-        var fieldHTML= '<div class="field_wrapper "><div class="input-group mb-3"><a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a><input type="text" name="objectives" value="" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"/></div></div>'
-
-
-          var x = 1; //Initial field counter is 1
-
-          //Once add button is clicked
-          // $(addButton).click(function(){
-          //     //Check maximum number of input fields
-          //     if(x < maxField){
-          //         x++; //Increment field counter
-          //         $theWrapper.append(fieldHTML); //Add field html
-          //     }
-          // });
-
-          $(addButton).click(function(){ //Once add button is clicked
-          var theWrapper = $(this).closest(wrapper);
-          var x = theWrapper.children().length;
-          if( x < maxField){ //Check maximum number of input fields
-            theWrapper.append(fieldHTML);
-          }
-      });
-
-          //Once remove button is clicked
-          $(wrapper).on('click', '.remove_button', function(e){
-              e.preventDefault();
-              $(this).parent('div').remove(); //Remove field html
-              x--; //Decrement field counter
-          });
-      });
-
-      </script>
-        <script>
-            $(document).ready(function(){
-          var maxField = 5; //Input fields increment limitation
-          var addButton = $('.add_button'); //Add button selector
-          var wrapper = ('.field_wrapper2'); //Input field wrapper
-          //var fieldHTML ='<div class="field_wrapper"><input type="text" name="field_name[]" value=""/>&nbsp;<a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a></div>'; //New input field html
-
-        var fieldHTML= '<div class="field_wrapper "><div class="input-group mb-3"><a href="javascript:void(0);" class="remove_button btn btn-outline-danger"><span class="bi bi-x-lg"></span></a><input type="text" name="prerequisites" value="" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"/></div></div>'
-
-
-          var x = 1; //Initial field counter is 1
-
-          //Once add button is clicked
-          // $(addButton).click(function(){
-          //     //Check maximum number of input fields
-          //     if(x < maxField){
-          //         x++; //Increment field counter
-          //         $theWrapper.append(fieldHTML); //Add field html
-          //     }
-          // });
-
-          $(addButton).click(function(){ //Once add button is clicked
-          var theWrapper = $(this).closest(wrapper);
-          var x = theWrapper.children().length;
-          if( x < maxField){ //Check maximum number of input fields
-            theWrapper.append(fieldHTML);
-          }
-      });
-
-          //Once remove button is clicked
-          $(wrapper).on('click', '.remove_button', function(e){
-              e.preventDefault();
-              $(this).parent('div').remove(); //Remove field html
-              x--; //Decrement field counter
-          });
-      });
-        </script>
 {% endblock %}
 

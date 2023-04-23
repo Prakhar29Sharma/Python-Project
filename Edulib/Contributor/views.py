@@ -11,6 +11,9 @@ from .forms import CreateContentForm
 from .models import ContributorProfile
 from django.contrib.auth import get_user_model
 from pymongo import MongoClient
+from bson.objectid import ObjectId
+import random
+import string
 
 User = get_user_model()
 
@@ -89,7 +92,12 @@ class CreateContentView(View):
         course_video = post_data["course_video"][0]
         body = post_data["body"][0]
 
+        letters = string.digits
+        course_id = ''.join(random.choice(letters) for i in range(10))
+        print("course id: ", id)
+
         document = {
+            "course_id": course_id,
             "uid": uid,
             "username": username,
             "course_title": course_title,
@@ -107,16 +115,42 @@ class CreateContentView(View):
         return HttpResponse(f"<p>{post_data}, username: {username}, userid: {uid}</p>")
 
 
+class DraftView(View):
+    template_name = "Contributor/show_draft.html"
+    context = {}
+    form = CreateContentForm()
+
+    def get(self, request, course_id):
+        uid = request.user.pk
+        draft = course_draft.find_one({"uid": uid, "course_id": course_id})
+        text_editor_content = draft["body"]
+        self.form = CreateContentForm(initial={'body': text_editor_content})
+        self.context = {
+            "draft": draft,
+            "form": self.form,
+            # "course_content": text_editor_content
+        }
+        return render(request, self.template_name, self.context)
+
+    def post(self, request):
+        course_id = request.POST["course_id"]
+        uid = request.user.pk
+        _id = ObjectId(course_id)
+        draft = course_draft.find_one({"uid": uid, "_id": _id})
+        self.context = {
+            "draft": draft
+        }
+        return render(request, self.template_name, self.context)
+
+
 class ContributeView(View):
     template_name = "Contributor/contribute.html"
 
     def get(self, request):
-        drafts = {
-            "drafts": {
-                "title": "Title1"
-            }
+        context = {
+            "drafts": course_draft.find({"uid": request.user.pk}),
         }
-        return render(request, self.template_name, drafts)
+        return render(request, self.template_name, context)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

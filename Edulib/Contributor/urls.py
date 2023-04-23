@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DashboardView, CreateProfileView, ContributeView, CreateCourseView, CreateContentView, DisplayProfileView
+from .views import DashboardView, CreateProfileView, ContributeView, CreateCourseView, CreateContentView, DisplayProfileView, DraftView
 from django.contrib.auth.decorators import login_required
 
 app_name = "Contributor"
@@ -11,5 +11,5 @@ urlpatterns = [
     path("contribute/", login_required(ContributeView.as_view()), name="contribute"),
     path("course/", login_required(CreateCourseView.as_view()), name="create_course"),
     path("course/<str:subject>/<str:unit>/", login_required(CreateContentView.as_view()), name="create_content"),
-
+    path("draft/<str:course_id>/", login_required(DraftView.as_view()), name="draft_view")
 ]
