@@ -35,37 +35,43 @@
                                 <div class="row mb-3">
                                   <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
                                   <div class="col-sm-10">
-                                    <input name="first_name" id="first_name" type="text" class="form-control" required>
+                                    <input name="first_name" id="first_name" type="text" class="form-control" required pattern="[a-zA-Z]{2,}">
+                                      <span style="color:red;" id="firstNameError"></span><br><br>
                                   </div>
                                 </div>
                                 <div class="row mb-3">
                                   <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
                                   <div class="col-sm-10">
-                                    <input name="last_name" id="last_name" type="text" class="form-control" required>
+                                    <input name="last_name" id="last_name" type="text" class="form-control" required pattern="[a-zA-Z]{2,}">
+                                      <span style="color:red;" id="lastNameError"></span><br><br>
                                   </div>
                                 </div>
                                 <div class="row mb-3">
                                   <label for="email" class="col-sm-2 col-form-label">Email</label>
                                   <div class="col-sm-10">
-                                    <input name="email" id="email" type="email" class="form-control" value="{{user.email}}" disabled>
+                                    <input name="email" id="email" type="email" class="form-control" value="{{user.email}}" disabled >
+                                      <span style="color:red;" id="emailError"></span><br><br>
                                   </div>
                                 </div>
                                 <div class="row mb-3">
                                   <label for="dob" class="col-sm-2 col-form-label">DOB</label>
                                   <div class="col-sm-10">
-                                    <input name="dob" id="dob" type="date" class="form-control" required>
+                                    <input name="dob" id="dob" type="date" max="2005-04-23" class="form-control" required>
+                                      <span style="color:red;" id="dobError"></span><br><br>
                                   </div>
                                 </div>
                                 <div class="row mb-3">
                                   <label for="phone_number" class="col-sm-2 col-form-label">Phone Number</label>
                                   <div class="col-sm-10">
-                                    <input name="phone_number" id="phone_number" type="text" class="form-control" required>
+                                    <input name="phone_number" id="phone_number" type="text" class="form-control" pattern="^[+]?[0-9]{6,15}$" required>
+                                    <span style="color:red;" id="phoneError"></span><br><br>
                                   </div>
                                 </div>
                                 <div class="row mb-3">
                                   <label for="city" class="col-sm-2 col-form-label">City</label>
                                   <div class="col-sm-10">
-                                    <input name="city" id="city" type="text" class="form-control" required>
+                                    <input name="city" id="city" type="text" class="form-control" pattern="[A-Za-z ]{1,50}" required>
+                                    <span style="color:red;" id="cityError"></span><br><br>
                                   </div>
                                 </div>
                                 <div class="row mb-3">
@@ -93,13 +99,15 @@
                                 <div class="row mb-3">
                                   <label for="qualification" class="col-sm-2 col-form-label">Qualification</label>
                                   <div class="col-sm-10">
-                                    <input name="qualification" id="qualification" type="text" class="form-control" required>
+                                    <input name="qualification" id="qualification" type="text" class="form-control" pattern="[A-Za-z0-9 ]{1,50}" required>
+                                    <span style="color:red;" id="qualificationError"></span><br><br>
                                   </div>
                                 </div>
                                 <div class="row mb-3">
                                   <label for="year_of_exp" class="col-sm-2 col-form-label">Years of Experience</label>
                                   <div class="col-sm-10">
-                                    <input name="years_of_exp" id="year_of_exp" type="number" class="form-control" required>
+                                    <input name="years_of_exp" id="year_of_exp" type="number" class="form-control" min="0" max="50" step="1" required>
+                                    <span style="color:red;" id="experienceError"></span><br><br>
                                   </div>
                                 </div>
 
@@ -167,6 +175,49 @@
             var text = "confirm leaving contributions page!";
             return text;
         }
+
+        var firstNameInput = document.getElementById("first_name");
+          firstNameInput.addEventListener("input", function() {
+            if (firstNameInput.validity.patternMismatch) {
+              firstNameInput.setCustomValidity("Please enter a valid first name");
+            } else {
+              firstNameInput.setCustomValidity("");
+            }
+            document.getElementById("firstNameError").innerHTML = firstNameInput.validationMessage;
+          });
+
+          var emailInput = document.getElementById("email");
+          emailInput.addEventListener("input", function() {
+            if (emailInput.validity.typeMismatch) {
+              emailInput.setCustomValidity("Please enter a valid email address");
+            } else {
+              emailInput.setCustomValidity("");
+            }
+            document.getElementById("emailError").innerHTML = emailInput.validationMessage;
+          });
+
+          var dobInput = document.getElementById("dob");
+          dobInput.addEventListener("input", function() {
+            var today = new Date();
+            var dob = new Date(dobInput.value);
+            var age = today.getFullYear() - dob.getFullYear();
+            if (dob > today || age < 18) {
+              dobInput.setCustomValidity("Please enter a valid date of birth");
+            } else {
+              dobInput.setCustomValidity("");
+            }
+            document.getElementById("dobError").innerHTML = dobInput.validationMessage;
+          });
+
+          var phoneInput = document.getElementById("phone_number");
+          phoneInput.addEventListener("input", function() {
+            if (phoneInput.validity.patternMismatch) {
+              phoneInput.setCustomValidity("Please enter a valid phone number");
+            } else {
+              phoneInput.setCustomValidity("");
+            }
+            document.getElementById("phoneError").innerHTML = phoneInput.validationMessage;
+          });
     </script>
 {% endblock %}
 
