@@ -123,40 +123,6 @@
 
     </main><!-- End #main -->
 
-    <script>
-      const subjectDropdown = document.getElementById('subject');
-      const unitDropdown = document.getElementById('unit');
-      const dsaUnits = ['Arrays', 'Stack', 'Queues', 'Graphs', 'Trees']
-      const dbmsUnits = ['MySQL', 'MongoDB', 'SQLite']
-      const cnUnits = ['Network Devices', 'OSI Model', 'Protocols', 'TCP/IP']
-
-      subjectDropdown.addEventListener('change', function() {
-        const selectedSubject = subjectDropdown.value;
-        unitDropdown.innerHTML = '';
-        if (selectedSubject === 'DSA') {
-            for (let i = 0; i < dsaUnits.length; i++) {
-              const option = document.createElement('option');
-              option.text = dsaUnits[i];
-              option.value = dsaUnits[i];
-              unitDropdown.add(option);
-            }
-          } else if (selectedSubject === 'DBMS') {
-            for (let i = 0; i < dbmsUnits.length; i++) {
-              const option = document.createElement('option');
-              option.text = dbmsUnits[i];
-              option.value = dbmsUnits[i];
-              unitDropdown.add(option);
-            }
-          } else if (selectedSubject === 'CN') {
-            for (let i = 0; i < cnUnits.length; i++) {
-              const option = document.createElement('option');
-              option.text = cnUnits[i];
-              option.value = cnUnits[i];
-              unitDropdown.add(option);
-            }
-          }
-      });
-    </script>
 
     {% include 'Contributor/footer.html' %}
 {% endblock %}

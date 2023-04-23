@@ -2,6 +2,9 @@
 {% load static %}
 {% block title %}Contribute{% endblock %}
 
+{% block extra_head %}
+{% endblock %}
+
 {% block body %}
     {% include 'Contributor/header.html' %}
     {% include 'Contributor/sidebar.html' %}
@@ -64,7 +67,7 @@
             {% endif %}
 
         <!-- Right side columns -->
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <!-- Recent Activity -->
             <div class="card">
                 <div class="card-body">
@@ -84,12 +87,14 @@
                                 <div class="card-body">
                                   <h5 class="card-title">{{ draft.course_title }}</h5>
                                     <hr>
-                                  <p style="font-size:10px; " class=""><span>{{ draft.subject }}</span> > <span>{{ draft.unit }}</span></p>
+                                  <p style="font-size:15px; " class=""><span>{{ draft.subject }}</span> > <span>{{ draft.unit }}</span></p>
                                   <p class="card-text">{{ draft.course_description }}</p>
 
                                     <a href="{% url 'Contributor:draft_view' draft.course_id %}">Edit</a>
                                     &nbsp;
-                                    <a href="#">Delete</a>
+                                    <a href="{% url 'Contributor:delete_draft' draft.course_id %}">Delete</a>
+
+                                    <a href="{% url 'Contributor:submit_for_review' draft.course_id %}">Submit</a>
 
                                 </div>
                               </div>

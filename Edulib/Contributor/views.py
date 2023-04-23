@@ -1,3 +1,4 @@
+import datetime
 import json
 
 import requests
@@ -17,11 +18,11 @@ import string
 
 User = get_user_model()
 
-
 client = MongoClient("mongodb://localhost:27017/")
 mydb = client["my_database"]
 course_draft = mydb["course_draft"]
-
+courses = mydb["courses"]
+notifications = mydb["notifications"]
 # Create your views here.
 
 
@@ -29,8 +30,21 @@ course_draft = mydb["course_draft"]
 #     def get(self, request):
 #         return render(request, "Contributor/index.html")
 
-class DashboardView(TemplateView):
+class DashboardView(View):
     template_name = "Contributor/index.html"
+    context = {}
+
+    def get(self, request):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
+        self.context = {
+            "notifications": notifications.find({"uid": request.user.pk}),
+            "notifications_count": count,
+            "my_contributions": courses.find({"uid": request.user.pk})
+        }
+        return render(request, self.template_name, self.context)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -38,16 +52,21 @@ class DashboardView(TemplateView):
 
 
 class CreateCourseView(View):
-
     template_name = "Contributor/create_course.html"
 
     def get(self, request):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
         profile = ContributorProfile.objects.get(email=request.user.email)
         subjects = profile.subjects_to_contribute
         subjects = subjects.replace("[", "").replace("]", "").replace("'", "")
         subjects = subjects.split(", ")
         context = {
-            "subjects": subjects
+            "subjects": subjects,
+            "notifications": notifications.find({"uid": request.user.pk}),
+            "notifications_count": count
         }
         return render(request, self.template_name, context)
 
@@ -68,18 +87,23 @@ class CreateContentView(View):
     form = CreateContentForm()
 
     def get(self, request, *args, **kwargs):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
         subject = self.kwargs['subject']
         unit = self.kwargs['unit']
         context = {
             "subject": subject,
             "unit": unit,
             "form": self.form,
+            "notifications": notifications.find({"uid": request.user.pk}),
+            "notifications_count": count
         }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         post_data = dict(request.POST)
-        print(post_data)
         username = request.user.username
         user = User.objects.get(username=username)
         uid = user.pk
@@ -94,7 +118,6 @@ class CreateContentView(View):
 
         letters = string.digits
         course_id = ''.join(random.choice(letters) for i in range(10))
-        print("course id: ", id)
 
         document = {
             "course_id": course_id,
@@ -112,7 +135,7 @@ class CreateContentView(View):
 
         # mongodb
         course_draft.insert_one(document)
-        return HttpResponse(f"<p>{post_data}, username: {username}, userid: {uid}</p>")
+        return redirect("Contributor:contribute")
 
 
 class DraftView(View):
@@ -121,6 +144,10 @@ class DraftView(View):
     form = CreateContentForm()
 
     def get(self, request, course_id):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
         uid = request.user.pk
         draft = course_draft.find_one({"uid": uid, "course_id": course_id})
         text_editor_content = draft["body"]
@@ -128,27 +155,100 @@ class DraftView(View):
         self.context = {
             "draft": draft,
             "form": self.form,
+            "notifications": notifications.find({"uid": request.user.pk}),
+            "notifications_count": count
             # "course_content": text_editor_content
         }
         return render(request, self.template_name, self.context)
 
-    def post(self, request):
-        course_id = request.POST["course_id"]
-        uid = request.user.pk
-        _id = ObjectId(course_id)
-        draft = course_draft.find_one({"uid": uid, "_id": _id})
-        self.context = {
-            "draft": draft
+    def post(self, request, course_id):
+        post_data = dict(request.POST)
+        username = request.user.username
+        user = User.objects.get(username=username)
+        uid = user.pk
+        draft = course_draft.find_one({"uid": uid, "course_id": course_id})
+        course_title = post_data["course_title"][0]
+        subject = draft["subject"]
+        unit = draft["unit"]
+        course_description = post_data["course_description"][0]
+
+        if post_data["objectives"][0] == "":
+            objectives = draft["objectives"]
+        else:
+            objectives = post_data["objectives"]
+
+        if post_data["prerequisites"][0] == "":
+            prerequisites = draft["prerequisites"]
+        else:
+            prerequisites = post_data["prerequisites"]
+
+        course_video = post_data["course_video"][0]
+        body = post_data["body"][0]
+
+        new_document = {
+            "course_id": course_id,
+            "uid": uid,
+            "username": username,
+            "course_title": course_title,
+            "subject": subject,
+            "unit": unit,
+            "course_description": course_description,
+            "objectives": objectives,
+            "prerequisites": prerequisites,
+            "course_video": course_video,
+            "body": body
         }
-        return render(request, self.template_name, self.context)
+
+        updated_values = {"$set": new_document}
+
+        course_draft.update_one({"uid": uid, "course_id": course_id}, updated_values)
+
+        return redirect("Contributor:contribute")
+
+
+class DeleteDraftView(View):
+
+    def get(self, request, course_id):
+        uid = request.user.pk
+        course_draft.delete_one({"uid": uid, "course_id": course_id})
+        return redirect("Contributor:contribute")
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class SubmitForReview(View):
+    def get(self, request, course_id):
+        uid = request.user.pk
+        email = request.user.email
+        user = User.objects.get(email=email)
+        course_content = course_draft.find_one({"uid": uid, "course_id": course_id})
+        courses.insert_one(course_content)
+        subject = course_content["subject"]
+        unit = course_content["unit"]
+        upload_time = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        notifications.insert_one({
+            "uid": uid,
+            "subject": subject,
+            "unit": unit,
+            "upload_time": upload_time
+        })
+        return redirect("Contributor:contribute")
 
 
 class ContributeView(View):
     template_name = "Contributor/contribute.html"
 
     def get(self, request):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
         context = {
             "drafts": course_draft.find({"uid": request.user.pk}),
+            "notifications": notifications.find({"uid": request.user.pk}),
+            "notifications_count": count
         }
         return render(request, self.template_name, context)
 
@@ -158,15 +258,20 @@ class ContributeView(View):
 
 
 class DisplayProfileView(View):
-
     template_name = 'Contributor/user_profile.html'
 
     def get(self, request):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
         user = User.objects.get(username=request.user.username, email=request.user.email)
         if user.isProfileComplete:
             profile = ContributorProfile.objects.get(uid=user)
             context = {
-                "profile": profile
+                "profile": profile,
+                "notifications": notifications.find({"uid": request.user.pk}),
+                "notifications_count": count
             }
             return render(request, self.template_name, context)
         else:
@@ -184,10 +289,20 @@ class CreateProfileView(View):
             "DSA",
             "DBMS",
             "CN",
-        ]
+        ],
+
     }
 
     def get(self, request):
+
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
+
+        self.context["notifications"] = notifications.find({"uid": request.user.pk})
+        self.context["notifications_count"]: count
+
         user = User.objects.get(email=request.user.email)
         print("hi")
         try:
@@ -203,6 +318,14 @@ class CreateProfileView(View):
         return render(request, self.template_name, self.context)
 
     def post(self, request):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
+
+        self.context["notifications"] = notifications.find({"uid": request.user.pk})
+        self.context["notifications_count"]: count
+
         post_data = dict(request.POST)
         json_data = json.dumps(post_data)
         print(json_data)
@@ -225,7 +348,12 @@ class CreateProfileView(View):
         portfolio_website = post_data["portfolio"][0]
         user = User.objects.get(email=email)
 
-        profile = ContributorProfile(uid=user, first_name=first_name, last_name=last_name, email=email, dob=dob, phone_number=phone_number, city=city, college=college, university=university, qualification=qualification, years_of_experience=years_of_experience, subjects_to_contribute=subjects_to_contribute, subjects_of_interest=subjects_of_interest,linkedin_profile=linkedin_profile, github_profile=github_profile, portfolio_website=portfolio_website)
+        profile = ContributorProfile(uid=user, first_name=first_name, last_name=last_name, email=email, dob=dob,
+                                     phone_number=phone_number, city=city, college=college, university=university,
+                                     qualification=qualification, years_of_experience=years_of_experience,
+                                     subjects_to_contribute=subjects_to_contribute,
+                                     subjects_of_interest=subjects_of_interest, linkedin_profile=linkedin_profile,
+                                     github_profile=github_profile, portfolio_website=portfolio_website)
         profile.save()
 
         user.isProfileComplete = True
@@ -239,6 +367,3 @@ class CreateProfileView(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
-
-
-

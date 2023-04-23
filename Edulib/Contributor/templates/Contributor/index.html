@@ -88,13 +88,36 @@
 
 
     <!-- Right side columns -->
-    <div class="col-lg-4">
+    <div class="col-lg-8">
         <!-- Recent Activity -->
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Recent Contributions<span>| Today</span></h5>
+                <h5 class="card-title">My Contributions</h5>
+                {% if my_contributions %}
+                    {% for course in my_contributions %}
+                            <!-- Card with an image on left -->
+                          <div class="card mb-3">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                <img src="https://prod-discovery.edx-cdn.org/media/programs/card_images/e250b08e-be2a-4b48-a43c-c9ae47f6cf14-a3f24d7ea4f3.jpg" class="img-fluid rounded-start" alt="course">
+                              </div>
+                              <div class="col-md-8">
+                                <div class="card-body">
+                                  <h5 class="card-title">{{ course.course_title }}</h5>
+                                    <hr>
+                                  <p style="font-size:15px; " class=""><span>{{ course.subject }}</span> > <span>{{ course.unit }}</span></p>
+                                  <p class="card-text">{{ course.course_description }}</p>
 
-        </div><!-- End Recent Activity -->
+                                    <a href="#"> View Course </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div><!-- End Card with an image on left -->
+                        {% endfor %}
+                {% else %}
+                    <p>No Contributions yet</p>
+                {% endif %}
+            </div><!-- End Recent Activity -->
         </div>
     </div><!-- End Right side columns -->
 

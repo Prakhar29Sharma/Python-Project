@@ -29,72 +29,42 @@
 
       <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
         <i class="bi bi-bell"></i>
-        <span class="badge bg-primary badge-number">4</span>
+        <span class="badge bg-primary badge-number">{{ notifications_count }}</span>
       </a><!-- End Notification Icon -->
 
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
         <li class="dropdown-header">
-          You have 4 new notifications
+          You have {{ notifications_count }} new notifications
+          {% if notifications_count != 0 %}
           <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+          {% endif %}
         </li>
-        <li>
-          <hr class="dropdown-divider">
-        </li>
+        {% if notifications %}
+          {% for notification in notifications %}
+            <li>
+              <hr class="dropdown-divider">
+            </li>
 
-        <li class="notification-item">
-          <i class="bi bi-exclamation-circle text-warning"></i>
-          <div>
-            <h4>Your Contribution to DSA is made public</h4>
-            <p></p>
-            <p>30 min. ago</p>
-          </div>
-        </li>
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Your Contribution to {{ notification.subject }} {{ notification.unit }} is made public</h4>
+                <p></p>
+                <p>{{ notification.upload_time }}</p>
+              </div>
+            </li>
+          {% endfor %}
+        {% endif %}
 
-        <li>
-          <hr class="dropdown-divider">
-        </li>
+        {% if notifications_count != 0 %}
+          <li>
+            <hr class="dropdown-divider">
+          </li>
 
-        <li class="notification-item">
-          <i class="bi bi-x-circle text-danger"></i>
-          <div>
-            <h4>Your Contribution to DSA is made public</h4>
-            <p></p>
-            <p>30 min. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-check-circle text-success"></i>
-          <div>
-            <h4>Your Contribution to DSA is made public</h4>
-            <p></p>
-            <p>30 min. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-
-        <li class="notification-item">
-          <i class="bi bi-info-circle text-primary"></i>
-          <div>
-            <h4>Your Contribution to DSA is made public</h4>
-            <p></p>
-            <p>30 min. ago</p>
-          </div>
-        </li>
-
-        <li>
-          <hr class="dropdown-divider">
-        </li>
-        <li class="dropdown-footer">
-          <a href="#">Show all notifications</a>
-        </li>
+          <li class="dropdown-footer">
+            <a href="#">Show all notifications</a>
+          </li>
+        {% endif %}
 
       </ul><!-- End Notification Dropdown Items -->
 
