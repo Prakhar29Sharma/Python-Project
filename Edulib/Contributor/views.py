@@ -117,6 +117,7 @@ class CreateContentView(View):
         objectives = post_data["objectives"]
         prerequisites = post_data["prerequisites"]
         course_video = request.FILES["course_video"]
+        course_image = request.FILES["course_image"]
         body = post_data["body"][0]
 
         letters = string.digits
@@ -130,6 +131,15 @@ class CreateContentView(View):
             for chunk in course_video.chunks():
                 destination.write(chunk)
 
+        # handling image uploaded
+        if course_image:
+            filename, extension = os.path.splitext(course_image.name)
+            new_image_name = str(uid)+str(course_id)+extension
+            path = os.path.join('/home/prakhar/Edulib/Edulib/static/' + new_image_name)
+            with open(path, 'wb') as destination:
+                for chunk in course_image.chunks():
+                    destination.write(chunk)
+
         document = {
             "course_id": course_id,
             "uid": uid,
@@ -141,6 +151,7 @@ class CreateContentView(View):
             "objectives": objectives,
             "prerequisites": prerequisites,
             "course_video": new_file_name,
+            "course_image": new_image_name,
             "body": body
         }
 
@@ -236,7 +247,11 @@ class SubmitForReview(View):
         uid = request.user.pk
         email = request.user.email
         user = User.objects.get(email=email)
+
         course_content = course_draft.find_one({"uid": uid, "course_id": course_id})
+        letters = string.digits
+        new_id = ''.join(random.choice(letters) for i in range(10))
+        course_content["_id"] = new_id
         courses.insert_one(course_content)
         subject = course_content["subject"]
         unit = course_content["unit"]
