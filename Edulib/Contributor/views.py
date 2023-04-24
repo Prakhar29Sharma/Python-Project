@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from .forms import CreateContentForm
 from .models import ContributorProfile
+# from UserAuth.models import Contributor
 from django.contrib.auth import get_user_model
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -270,8 +271,9 @@ class CourseView(View):
     context = {}
 
     def get(self, request, course_id):
+        course_content = courses.find_one({"course_id": course_id})
         self.context = {
-            "course_content": courses.find_one({"uid": request.user.pk, "course_id": course_id})
+            "course_content": course_content
         }
         return render(request, self.template_name, self.context)
 
@@ -343,10 +345,10 @@ class CreateProfileView(View):
         self.context["notifications_count"]: count
 
         user = User.objects.get(email=request.user.email)
-        print("hi")
+        # print("hi")
         try:
             profile = ContributorProfile.objects.get(uid=user)
-            print(profile)
+            # print(profile)
             if profile is not None:
                 return redirect("Contributor:dashboard")
             else:
@@ -394,13 +396,38 @@ class CreateProfileView(View):
                                      subjects_of_interest=subjects_of_interest, linkedin_profile=linkedin_profile,
                                      github_profile=github_profile, portfolio_website=portfolio_website)
         profile.save()
+        
+        c = User.objects.get(pk=request.user.pk)
+        c.isProfileComplete = True
+        c.save()
 
-        user.isProfileComplete = True
-        user.save()
-
-        if user.isProfileComplete:
+        if c.isProfileComplete:
             return redirect("Contributor:dashboard")
 
+        return render(request, self.template_name, self.context)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class OthersContributionView(View):
+    template_name = "Contributor/others_contributions.html"
+    context = {}
+
+    def get(self, request):
+        count = 0
+        n = notifications.find({"uid": request.user.pk})
+        for x in n:
+            count += 1
+
+        others_courses = courses.find({"uid": {"$ne": request.user.pk}})
+
+        self.context = {
+            "notifications": notifications.find({"uid": request.user.pk}),
+            "notifications_count": count,
+            "courses": others_courses
+        }
         return render(request, self.template_name, self.context)
 
     @method_decorator(login_required)
