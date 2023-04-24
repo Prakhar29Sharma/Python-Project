@@ -38,8 +38,10 @@ Siddesh Patil : https://github.com/siddesh1672003
 
 <h2 id="snip">UI-Snippets</h2>
 <h3 id = "login_header">Login</h3>
-<img id="login" src="ui snippets/login_page.png">
+<img id="login" src="ui snippets/login_page.jpg">
 <h3 id = "user_reg_header">User Registration</h3>
-<img id="userregistration" src="snippets/user_registration.png">
+<img id="userregistration" src="snippets/user_registration.jpg">
 <h3 id = "dashboard_header">Dashboard</h3>
-<img id="dashboard" src="snippets/Dashboard.png">
+<img id="dashboard" src="snippets/Dashboard.jpg">
+<h3 id = "course_header">Course PAge</h3>
+<img id="course" src="snippets/Course_page.jpg">
