@@ -1,0 +1,75 @@
+{% extends 'Contributor/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+{% include 'Contributor/header.html' %}
+{% include 'Contributor/sidebar.html' %}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'Contributor:dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item active">Others Contribution</li>
+    </ol>
+    </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+    <div class="row">
+
+    <!-- Left side columns -->
+    <div class="col-lg-8">
+        <div class="row">
+
+
+     </div>
+    </div><!-- End Left side columns -->
+
+
+
+
+    <!-- Right side columns -->
+    <div class="col-lg-8">
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Others Contributions</h5>
+                {% if courses %}
+                    {% for course in courses %}
+                            <!-- Card with an image on left -->
+                          <div class="card mb-3">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                <img src="{% static course.course_image %}" class="img-fluid rounded-start" alt="course">
+                              </div>
+                              <div class="col-md-8">
+                                <div class="card-body">
+                                  <h5 class="card-title">{{ course.course_title }}</h5>
+                                    <hr>
+                                  <p style="font-size:15px; " class=""><span>{{ course.subject }}</span> > <span>{{ course.unit }}</span></p>
+                                  <p class="card-text">{{ course.course_description }}</p>
+
+                                    <a href="{% url 'Contributor:course_view' course.course_id %}"> View Course </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div><!-- End Card with an image on left -->
+                        {% endfor %}
+                {% else %}
+                    <p>No Contributions yet</p>
+                {% endif %}
+            </div><!-- End Recent Activity -->
+        </div>
+    </div><!-- End Right side columns -->
+
+    </div>
+
+    </div>
+    </section>
+
+</main><!-- End #main -->
+{% include 'Contributor/footer.html' %}
+{% endblock %}

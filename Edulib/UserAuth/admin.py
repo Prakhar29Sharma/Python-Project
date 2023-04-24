@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import User, Student, Contributor, Evaluator
 # Register your models here.
 
-admin.register(User)
-admin.register(Student)
-admin.register(Contributor)
-admin.register(Evaluator)
+from django.contrib.auth import get_user_model
+
+user = get_user_model()
+
+admin.register(user)
+

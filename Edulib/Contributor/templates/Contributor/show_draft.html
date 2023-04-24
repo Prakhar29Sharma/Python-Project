@@ -1,5 +1,5 @@
 {% extends 'Contributor/base.html' %}
-
+{% load static %}
 {% block title %}Course{% endblock %}
 
 {% block body %}
@@ -92,12 +92,25 @@
                                 </div>
                               <!-- endof prerequisite -->
 
-                                <div class="row mb-3">
-                                  <label for="course_video" class="col-sm-2 col-form-label">Course Video</label>
-                                  <div class="col-sm-10">
-                                    <input name="course_video" id="course_video" type="file" class="form-control">
-                                  </div>
-                                </div>
+
+
+                                    {% if video %}
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">Course Video</label>
+                                        <video width="320" height="500" controls autoplay>
+                                          <source src="{% static video %}" type="video/mp4">
+                                          Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+
+                                    {% endif %}
+
+<!--                                <div class="row mb-3">-->
+<!--                                  <label for="course_video" class="col-sm-2 col-form-label">Course Video</label>-->
+<!--                                  <div class="col-sm-10">-->
+<!--                                    <input name="course_video" id="course_video" type="file" class="form-control">-->
+<!--                                  </div>-->
+<!--                                </div>-->
 
                                 <div class="row mb-3">
                                   <div class="col-sm-10">
@@ -123,41 +136,13 @@
 
     </main><!-- End #main -->
 
-    <script>
-      const subjectDropdown = document.getElementById('subject');
-      const unitDropdown = document.getElementById('unit');
-      const dsaUnits = ['Arrays', 'Stack', 'Queues', 'Graphs', 'Trees']
-      const dbmsUnits = ['MySQL', 'MongoDB', 'SQLite']
-      const cnUnits = ['Network Devices', 'OSI Model', 'Protocols', 'TCP/IP']
-
-      subjectDropdown.addEventListener('change', function() {
-        const selectedSubject = subjectDropdown.value;
-        unitDropdown.innerHTML = '';
-        if (selectedSubject === 'DSA') {
-            for (let i = 0; i < dsaUnits.length; i++) {
-              const option = document.createElement('option');
-              option.text = dsaUnits[i];
-              option.value = dsaUnits[i];
-              unitDropdown.add(option);
-            }
-          } else if (selectedSubject === 'DBMS') {
-            for (let i = 0; i < dbmsUnits.length; i++) {
-              const option = document.createElement('option');
-              option.text = dbmsUnits[i];
-              option.value = dbmsUnits[i];
-              unitDropdown.add(option);
-            }
-          } else if (selectedSubject === 'CN') {
-            for (let i = 0; i < cnUnits.length; i++) {
-              const option = document.createElement('option');
-              option.text = cnUnits[i];
-              option.value = cnUnits[i];
-              unitDropdown.add(option);
-            }
-          }
-      });
-    </script>
 
     {% include 'Contributor/footer.html' %}
+    <script>
+        window.onbeforeunload = function() {
+            var text = "confirm leaving contributions page!";
+            return text;
+        }
+    </script>
 {% endblock %}
 

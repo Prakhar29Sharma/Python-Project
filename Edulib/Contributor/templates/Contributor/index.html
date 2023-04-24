@@ -1,4 +1,5 @@
 {% extends 'Contributor/base.html' %}
+{% load static %}
 {% block title %}Dashboard{% endblock %}
 {% block body %}
 {% include 'Contributor/header.html' %}
@@ -61,7 +62,7 @@
      <div class="col-xxl-20 col-md-">
       <div class="card info-card sales-card">
 
-        <div class="card-body"><a href="#">
+        <div class="card-body"><a href="{% url 'Contributor:others_contribution' %}">
           <h5 class="card-title">Review and rate others contribution </h5>
 
           <div class="d-flex align-items-center">
@@ -88,13 +89,36 @@
 
 
     <!-- Right side columns -->
-    <div class="col-lg-4">
+    <div class="col-lg-8">
         <!-- Recent Activity -->
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Recent Contributions<span>| Today</span></h5>
+                <h5 class="card-title">My Contributions</h5>
+                {% if my_contributions %}
+                    {% for course in my_contributions %}
+                            <!-- Card with an image on left -->
+                          <div class="card mb-3">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                <img src="{% static course.course_image %}" class="img-fluid rounded-start" alt="course">
+                              </div>
+                              <div class="col-md-8">
+                                <div class="card-body">
+                                  <h5 class="card-title">{{ course.course_title }}</h5>
+                                    <hr>
+                                  <p style="font-size:15px; " class=""><span>{{ course.subject }}</span> > <span>{{ course.unit }}</span></p>
+                                  <p class="card-text">{{ course.course_description }}</p>
 
-        </div><!-- End Recent Activity -->
+                                    <a href="{% url 'Contributor:course_view' course.course_id %}"> View Course </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div><!-- End Card with an image on left -->
+                        {% endfor %}
+                {% else %}
+                    <p>No Contributions yet</p>
+                {% endif %}
+            </div><!-- End Recent Activity -->
         </div>
     </div><!-- End Right side columns -->
 
