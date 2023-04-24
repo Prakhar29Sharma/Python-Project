@@ -50,3 +50,4 @@ Siddesh Patil : https://github.com/siddesh1672003
 <img id="dashboard" src="snippets/dashboard.jpg">
 <h3 id = "course_header">Course</h3>
 <img id="course" src="snippets/Course_page.jpg">
+<img id="course1" src="snippets/Course_page1.jpg">
