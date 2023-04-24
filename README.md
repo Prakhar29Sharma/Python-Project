@@ -38,10 +38,10 @@ Siddesh Patil : https://github.com/siddesh1672003
 
 <h2 id="snip">UI-Snippets</h2>
 <h3 id = "landing_header">Landing page</h3>
-<img id="land" src="snippets/Landing_page1.jpg">
-<h3 id = "landing1_header">Landing page</h3>
-<img id="land1" src="snippets/Landing_page2.jpg">
-
+<img id="land" src="snippets/landing_page1.jpg">
+<img id="land1" src="snippets/landing_page2.jpg">
+<img id="land2" src="snippets/landing_page3.jpg">
+<img id="land3" src="snippets/landing_page4.jpg">
 <h3 id = "login_header">Login</h3>
 <img id="login" src="snippets/Login_page.jpg">
 <h3 id = "user_reg_header">User Registration</h3>
