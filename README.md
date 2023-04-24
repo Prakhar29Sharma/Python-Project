@@ -41,7 +41,7 @@ Siddesh Patil : https://github.com/siddesh1672003
 <img id="login" src="snippets/Login_page.jpg">
 <h3 id = "user_reg_header">User Registration</h3>
 <img id="userregistration" src="snippets/user_registration.jpg">
-<h3 id = "dashboard_header">Dashboard</h3>
-<img id="dashboard" src="snippets/dashboard.jpg>
-<h3 id = "course_header">Course_page</h3>
+<h3 id = "dashobard_header">Dashboard</h3>
+<img id="dashboard" src="snippets/dashboard.jpg">
+<h3 id = "course_header">Course</h3>
 <img id="course" src="snippets/Course_page.jpg">
