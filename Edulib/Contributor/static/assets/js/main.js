@@ -319,3 +319,8 @@
   }
 
 })();
+
+$(".notes img").addClass("img-fluid");
+$(".notes pre").addClass("text-wrap");
+
+console.log(document.querySelector(".notes").innerHTML);
